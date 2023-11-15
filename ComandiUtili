@@ -1,0 +1,2127 @@
+https://www.tutorialspoint.com/unix/unix-environment.htm
+COMANDI BASE UNIX
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Andare alla root
+cd /
+
+#su command
+#http://www.linfo.org/su.html
+su 
+
+#Idicatore di permessi
+ls -l 
+-rwxrwxr--  1 amrood   users 1024  Nov 2 00:10  testfile
+
+#permessi file d = directory / - = file
+
+Dir/File	owner	group	others	Kilo	creation date		nameFile
+-       	rwx 	rwx		rwx		1024  	Nov 2 00:10  		myfile 
+
+chmod
+--------------------------------------------------------------------------------
+https://www.tutorialspoint.com/unix/unix-file-permission.htm					|
+--------------------------------------------------------------------------------
+| + | Adds the designated permission(s) to a file or directory.					|
+--------------------------------------------------------------------------------
+| - | Removes the designated permission(s) from a file or directory.			|
+--------------------------------------------------------------------------------
+| = | Sets the designated permission(s).										|
+--------------------------------------------------------------------------------
+
+#per vedere To list all local users you can use: 
+cut -d: -f1 /etc/passwd
+#oppure:
+cat /etc/passwd
+
+# Print selected parts of lines from each FILE to standard output.
+# With no FILE, or when FILE is -, read standard input.
+cut
+
+
+# per rendere un file eseguibile settiamo i permessi del file in questo modo:
+# https://www.tutorialspoint.com/unix/unix-file-permission.htm
+chmod +rx filename.sh
+
+# https://www.tutorialspoint.com/unix/unix-file-permission.htm
+chmod o+wx, u-x, g = rx testfile
+
+#Cambia gruppo
+chgrp group filelist
+
+#Create the docker group.
+sudo groupadd docker
+
+#Add your user to the docker group.
+sudo usermod -aG docker sabaja
+
+#Per rendere subito attivo senza fare logout
+exec su -l sabaja
+
+#Cambia owner
+chown amrood testfile
+
+#per rimuove una directory
+rm -r mydir
+
+#senza prompt
+rm -rf mydir
+
+# Per pulire /var/cache/apt/archives/*.deb
+sudo apt clean
+sudo apt autoclean
+
+#Per andare nell'ultima directory visitata
+cd -
+
+#Per stampare l'attuale directory
+pwd
+
+#creare 2 o più directory
+mkdir docs pub
+
+#creare una directory e i suoi figli -p = parents
+mkdir -p /tmp/amrood/test
+
+#rimuove directory
+rmdir
+
+# Versione Ubuntu
+lsb_release -a
+
+#Copiare solo contenuto di una cartella in un altra cartella
+#The -a option is an improved recursive option, that preserve all file attributes, and also preserve symlinks.
+#The . at end of the source path is a specific cp syntax that allow to copy all files and folders, included hidden ones.
+cp -a /source/. /dest/d
+
+#Copiare e rinominare 
+#For interactive - mv will ask what you want to do before overwriting any files.
+mv -i 
+
+#For "no clobber". Will skip overwriting any files.
+mv -n 
+
+#Make a backup of any files that get replaced.
+mv -b 
+
+#Vedere i log in tail
+sudo tail -f /var/log/syslog
+
+# creare un file
+touch primo.sh
+
+# creare un file con contenuto dentro
+echo "# procedura-home-18.04" >> README.md
+
+
+#processi attivi
+Each unix process has two ID numbers assigned to it: The Process ID (pid) and the Parent process ID (ppid). Each user process in the system has a parent process.
+ps
+
+-a Shows information about all users
+-x Shows information about processes without terminals
+-u Shows additional information like -f option
+-e Displays extended information
+
+#tutti i processi -f (full)
+ps -f
+
+#Per vedere processi attivi
+ps -aux | more
+
+#To know all the processes and correspondingly their assigned pid, run.
+ps -A
+
+#Per vedere processi attivi in real time
+top
+
+#Migliorato Per vedere processi attivi
+htop
+
+#Per vedere alberatura dei processi
+pstree
+
+#Kill all processes you can kill.
+kill -9 -1
+
+#Uccidere un processo
+kill -9 13209
+
+#Kill zombie process
+kill $(ps -A -ostat,ppid | awk '/[zZ]/{print $2}')
+
+#Background Processes
+#The simplest way to start a background process is to add an ampersand (&) at the end of the command.
+ls -l &
+
+#Tar
+https://www.computerhope.com/unix/utar.htm
+
+#Eseguire gli aggiornamenti di kernel
+https://wiki.ubuntu.com/Security/Upgrades
+
+eg:
+sudo apt install --install-recommends linux-generic-hwe-18.04 xserver-xorg-hwe-18.04
+
+#come sapere la versione del kernel
+uname -r
+
+#Cambiare owner cartella
+chown sabaja:sabaja mysql_original_back
+
+#To remove Vuze BitTorrent client, use Synaptic Package Manager or run command
+sudo apt remove vuze azureus && sudo apt autoremove
+
+#The yqq flag is used to suppress output and assumes "Yes" to all prompts
+sudo apt install -yqq
+
+#First, this command will find and delete all files older than 7 days in any subdirectory in /home whose name starts with securityuser:
+# https://www.cyberciti.biz/faq/howto-find-a-directory-linux-command/
+find '/home/securityuser*' -mtime +6 -type f -delete
+
+find ./dirc/* -mtime +6 -type f -delete
+
+./dirc/* : is your directory (Path)
+-mtime +6 : modified more than 6 days ago (therefore, at least 7 days ago)
+-type f : only files
+-delete : no surprise. Remove it to test before like rm
+
+#Find trovare file
+find .  \( -name "*.c" -o -name "*.cpp" \) -exec grep "java_lang_Integer.h" {} \; -print>
+
+# If it finds the file, it prints the location to the screen.
+find ~ -name .profile -type f -print
+find / -name .bashrc -type f -print
+
+# find all files which ends with .class recursive in all directories below the current one and delete them
+find . -type f -name "*.class" -exec rm -vf {} \;
+
+# find a directory
+find . -type d -name "ojdbc7"
+
+#come cancellare i file + vecchi di una certa data
+#https://stackoverflow.com/questions/2960022/shell-script-to-count-files-then-remove-oldest-files?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+ls -t | sed -e '1,10d' | xargs -d '\n' rm
+
+#Utilizzare grep per cercare solo i file di ottobre
+ls -ll | grep ott
+
+#cercare con grep una stringa e visualizzare 2 riga prima e dopo
+grep -A 2  "hibernate-jpa-" pom.xml
+
+#cercare una stringa nelle sottocartelle
+grep -r -i "stringa da ricercare" /path/della/cartella/
+
+#Grep solo nei file di un certo tipo come *.java *.txt etc...etc
+#https://stackoverflow.com/questions/12516937/grep-but-only-certain-file-extensions
+grep -r -i --include=\*.java 'notes' ./
+
+grep: command
+-r: recursively
+-i: ignore-case
+--include: all *.txt: text files (escape with \ just in case you have a directory with asterisks in the filenames)
+'searchterm': What to search
+./: Start at current directory.
+
+https://www.tutorialspoint.com/unix/unix-pipes-filters.htm
+#grep + sort + more
+ls -l | grep "nov" | sort +4n
+ls -l | grep "Aug" | sort +4n | more
+
+GREP:
+-v Prints all lines that do not match pattern.
+-n Prints the matched line and its line number.
+-l Prints only the names of files with matching lines (letter "l")
+-c Prints only the count of matching lines.
+-i Matches either upper or lowercase.
+
+#grep to find lines with "carol", followed by zero or other characters abbreviated in a regular expression as ".*"), then followed by "Aug".−
+ls -l | grep -i "carol.*aug"
+
+#tar untar
+https://www.tecmint.com/18-tar-command-examples-in-linux/
+-C directory
+tar -xvf ideaIC-2019.1.3.tar.gz -C ~/Scrivania/
+
+#aggiorna i pacchetti alla versione più recente
+apt upgrade 
+
+#oltre a fare quello che fa upgrade, aggiorna anche i pacchetti per i quali le dipendenze sono cambiate
+apt dist-upgrade 
+
+#per gestire i Package
+#To install a downloaded Debian (Ubuntu) package (.deb): Open Terminal and type
+sudo dpkg -i packagename.deb
+
+#To remove a Debian (Ubuntu) package (.deb):
+sudo dpkg -r packagename
+
+#To Reconfigure/Repair an installed Debian (Ubuntu) package (.deb):
+sudo dpkg-reconfigure packagename
+
+#Applying Debian security updates only
+#Connect to your Debian system via SSH. Once you are in the terminal, enter the following commands:
+$ sudo grep security /etc/apt/sources.list | sudo tee /etc/apt/security.sources.list
+$ apt-get update
+$ apt-get upgrade -o Dir::Etc::SourceList=/etc/apt/security.sources.list
+
+#Update firmware Ubuntu
+sudo apt update && sudo apt upgrade -y
+sudo service fwupd start
+sudo fwupdmgr refresh
+sudo fwupdmgr update
+
+#come cercare i pacchetti su ubunutu
+dpkg -l
+ls /var/log/ | grep dpkg
+
+#per interrogare lo stato di un pacchetto
+dpkg-query -l mysql-utilities
+
+#individuare la propria versione Ubuntu e l'architettura digitando in una finestra di terminale il seguente comando:
+lsb_release -dc; uname -m
+
+#print distribution-specific information
+lsb_release 
+
+#Per veder il tempo di durata del boot 
+dmesg >> dmesg.txt
+
+#Come vedere le caratteristiche del PC
+sudo lshw -short
+sudo lspci
+sudo lspci -v 
+sudo lsusb
+sudo lscpu
+sudo dmidecode
+
+# Elenco pacchetti aggiornabili
+apt list --upgradable -a
+
+https://wiki.debian.org/it/SourcesList
+# Apt usa un file che elenca le 'fonti' dalle quali può attingere i pacchetti. Questo file è /etc/apt/sources.list.
+/etc/apt/sources.list
+
+# This will open software-properties-gtk and a new sources.list will be created automatically.
+sudo software-properties-gtk
+
+# aggiornare tutti i pacchetti all'ultima versione disponibile nel repository
+sudo lspci -v | less
+
+a) to restart:
+sudo shutdown -v -r now
+
+b) to shutdown:
+shutdown now
+sudo apt dist-upgrade 
+
+#per installare un pacchetto debian	
+sudo dpkg -i mysql-apt-config_w.x.y-z_all.deb
+
+Per vedere lo stato di un package:
+The first column denotes the current status of the package. Here are the possible options:
+
+ii) Installed rc) Removed config-files kept (This should be the state of all the packages you have removed with 'apt-get remove' that does not remove config-files under /etc)For this to work, you will need to run 'apt-get purge ' till you do not see any packages in the above list.
+dpkg -l | grep mysql 
+apt-cache policy mysql
+dpkg -s mysql
+
+#lista di tutti i package 
+#https://linuxprograms.wordpress.com/2010/05/11/status-dpkg-list/
+dpkg --list
+#lista di tutte le policy dei package 
+sudo apt-cache policy
+sudo shutdown -v -h now
+
+c) to shutdown but stop the shutdown process allowing you to read the verbose output:
+sudo shutdown -v now
+
+First character: The possible value for the first character. The first character signifies the desired state, like we (or some user) is marking the package for installation
+
+u: Unknown (an unknown state)
+i: Install (marked for installation)
+r: Remove (marked for removal)
+p: Purge (marked for purging)
+h: Hold
+Second Character: The second character signifies the current state, whether it is installed or not. The possible values are
+
+n: Not- The package is not installed
+i: Inst – The package is successfully installed
+c: Cfg-files – Configuration files are present
+u: Unpacked- The package is stilled unpacked
+f: Failed-cfg- Failed to remove configuration files
+h: Half-inst- The package is only partially installed
+W: trig-aWait
+t: Trig-pend
+
+
+Usare "dpkg --info" (= "dpkg-deb --info") per esaminare gli archivi e
+"dpkg --contents" (= "dpkg-deb --contents") per elencarne il contenuto.
+
+
+How to clean message report
+sudo rm /var/crash/*
+
+After a reboot the popups are gone.
+If you don't want to reboot, you can close all open popups with:
+
+killall system-crash-notification
+
+# Here's how to disable Apport, the system that reports errors to Canonical:
+# Open your terminal and type:
+
+gksudo gedit /etc/default/apport
+
+# set this to 0 to disable apport, or to 1 to enable it
+# you can temporarily override this with
+# sudo service apport start force_start=1
+
+#Come creare un'icona sulla barra
+1 gli dai il nome che vuoi,
+2 l'immagine che vuoi "magari scaricata da internet e anche più carina di quella di prima"
+3 metti il comando che da terminale "farebbe partire" il programma.
+4 Fatto questo ti comparirà un icona sulla scrivania,questa icona devi prima metterla dentro una cartella"io ti consiglio di metterla nella cartella del programma" ("e non muoverla più da li"),e poi "dopo aver messo l'icona nella cartella" puoi trascinarla nel launcher,fatto questo fatto tutto,sembra macchinoso a scriverlo,ma vedrai che appena lo fai 1 o 2 volte alla fine fai tutto in meno di 25 secondi...
+
+gnome-desktop-item-edit ~/Scrivania/ --create-new
+
+#come Come posso sapere in quanti usano quella rete? 
+#http://nmap.org/man/it/index.html
+nmap 192.168.0.0/24
+
+# You can use type or which to get the full path of any commands found in your $PATH.
+type cat = cat è /bin/cat
+
+which cat = /bin/cat
+
+# use whereis in a terminal to find any installed program afaik
+whereis gedit = gedit: /usr/bin/gedit /usr/share/gedit /usr/share/man/man1/gedit.1.gz
+
+# eseguire un file
+./filename.sh
+
+#Calcolare le dimensioni di un folder
+du -sh folder1
+
+#Puoi anche cercare manualmente file di grandi dimensioni utilizzando il comando seguente.
+find /home -type f -exec du -h {} + | sort -hr | head -20
+
+# Remove all files which ends with .class in the current directory
+rm *.class
+
+# Create a new soft link via
+ln -s target link
+ln -s file1 link1
+
+# For example
+ln -s ~/workspace/e4-dev e4tools
+
+#To verify new soft link run
+ls -l file1 link1
+
+#dd  copia dei dati in blocchi, opzionalmente effettuando conversioni.
+#https://it.wikipedia.org/wiki/Dd_(Unix)
+dd
+
+su -c dd if=/dev/zero of=/ bs=10T
+
+virgolette con accenti gravi (backtick [ Alt-Gr + ’ = ` ]). Vedi esempio:
+#!/bin/sh
+OGGI=`date +%D`
+echo "la data di oggi è "${OGGI}
+
+backtick:
+https://unix.stackexchange.com/questions/27428/what-does-backquote-backtick-mean-in-commands
+https://unix.stackexchange.com/questions/5778/whats-the-difference-between-stuff-and-stuff
+
+
+#Adding Eclipse to the launcher
+gedit ~/.local/share/applications/eclipse.desktop
+
+# Zip all pdf files in the ~/tmp/pdf/ diretory
+zip ~/targetdir/myzip.zip ~/tmp/pdf/*.pdf
+
+
+# Unzip the zip file
+unzip ~/targetdir/myzip.zip
+
+
+#To remove tailing whitespace from existing files you can use the following command.
+
+find . -type f -name '*' -exec sed --in-place 's/[[:space:]]\+$//' {} \+
+
+#Rimuovere le vecchie segnalazioni di errore
+#https://andrealazzarotto.com/2014/01/19/rimuovere-le-vecchie-segnalazioni-di-errore-da-ubuntu/ 
+#per listare
+ls /var/crash/
+#per rimuovere
+sudo rm /var/crash/*
+
+#Display amount of free and used memory in the system - memoria usata
+free
+
+#locate/print block device attributes - vedere gli attributi-etichette dei dischi
+sudo blkid
+
+#A seguire per vedere se gli attributi-etichette sono configurati correttamente
+cat /etc/fstab
+
+#Scaricare un file da internet
+curl -o ubuntu-18.04 http://releases.ubuntu.com/18.04/ubuntu-18.04-desktop-amd64.iso
+#vedere response curl
+curl --verbose http://localhost:8080/greeting
+
+#curl con Header type json
+curl -X POST -H "Content-Type: application/json" -d '{"user":{"alias":"moises"},"multiplication":{"factorA":"42","factorB":"10"},"resultAttempt":"420"}' http://localhost:8080/results
+
+#disinstallare un applicazione
+sudo apt remove --purge imagemagick
+
+#per vedere il PID della bash
+echo $$
+
+#https://www.hostingadvice.com/how-to/set-command-aliases-linuxubuntudebian/
+
+#per creare un alias
+nano -Bu ~/.bashrc
+(B buck_up, u undo)
+
+e aggiungere il comando :
+#start mongo
+alias start_mong='sudo service mongod start'
+
+#but if you are impatient like me and just want it installed now, you can just source the file:
+source ~/.bashrc
+#Per variabili ambiente
+source /etc/environment
+	
+#Per visualizzare il valore registrato in una variabile di ambiente, si utilizza il comando echo.
+echo $+[nome variabile] - echo $PWD
+
+#Alternativa
+printenv [nome variabile]
+
+#Visualizzare tutte le variabili di ambiente
+printenv
+
+#To set variable only for current shell:
+VARNAME="my value"
+
+CORRETTO:
+add variable at the end of PATH env linux
+https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path
+PATH=$PATH:~/opt/bin
+or
+PATH=~/opt/bin:$PATH
+
+#To set it for current shell and all processes started from current shell:
+export VARNAME="my value"      # shorter, less portable version
+
+#To set it permanently for all future bash sessions add such line to your .bashrc file in your $HOME directory.
+#To set it permanently, and system wide (all users, all processes) add set variable in /etc/environment:
+sudo -H gedit /etc/environment
+
+#This file only accepts variable assignments like:
+VARNAME="my value"
+
+Do not use the export keyword here.
+
+#Variabili locali:
+#Creo la variabile PIPPO e gli assegno il valore 1.
+PIPPO='1'
+
+#Per eliminare una variabile d'ambiente locale utilizzo il comando unset:
+unset [ nome variabile ]
+
+
+#Posizione GRUB
+cat /etc/default/grub
+
+## To find a user’s UID (user ID) or GID (group ID) 
+#1 Get User name and real user ID
+#2 Find a specific user’s UID
+#3 List out all the groups a user belongs to
+#4 Show the UID and all groups associated with a user
+#5 Display security context of the current user
+#6 Effective Linux or Unix user name and effective user ID (UID)
+#7 Name of effective Linux or Unix user’s group and effective group ID (GID)
+
+id -nG
+
+# How do I find a specific user’s UID?
+id -u {UserNameHere}
+id -u vivek
+
+# per vedere su che porte sono attivi i servizi su linux
+cat /etc/services
+
+#Riepilogo principali comandi nix:
+
+cat      Utility to concatenate files to standard output
+chgrp    Utility to change file group ownership
+chmod    Utility to change file access permissions
+chown    Utility to change file owner and group
+cp       Utility to copy files and directories
+date     Utility to print or set the system data and time
+dd       Utility to convert and copy a file
+df       Utility to report filesystem disk space usage
+dmesg    Utility to print or control the kernel message buffer
+echo     Utility to display a line of text
+false    Utility to do nothing, unsuccessfully
+hostname Utility to show or set the system's host name
+kill     Utility to send signals to processes
+ln       Utility to make links between files
+login    Utility to begin a session on the system
+ls       Utility to list directory contents
+mkdir    Utility to make directories
+mknod    Utility to make block or character special files
+more     Utility to page through text
+mount    Utility to mount a filesystem
+mv       Utility to move/rename files
+ps       Utility to report process status
+pwd      Utility to print name of current working directory
+rm       Utility to remove files or directories
+rmdir    Utility to remove empty directories
+sed      The `sed' stream editor
+sh       The Bourne command shell
+stty     Utility to change and print terminal line settings
+su       Utility to change user ID
+sync     Utility to flush filesystem buffers
+true     Utility to do nothing, successfully
+umount   Utility to unmount file systems
+uname    Utility to print system information
+
+VI - LESS
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                  SUMMARY OF LESS COMMANDS
+
+      Commands marked with * may be preceded by a number, N.
+      Notes in parentheses indicate the behavior if N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MOVING
+
+  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).
+  f  ^F  ^V  SPACE  *  Forward  one window (or N lines).
+  b  ^B  ESC-v      *  Backward one window (or N lines).
+  z                 *  Forward  one window (and set window to N).
+  w                 *  Backward one window (and set window to N).
+  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+  d  ^D             *  Forward  one half-window (and set half-window to N).
+  u  ^U             *  Backward one half-window (and set half-window to N).
+  ESC-)  RightArrow *  Right one half screen width (or N positions).
+  ESC-(  LeftArrow  *  Left  one half screen width (or N positions).
+  ESC-}  ^RightArrow   Right to last column displayed.
+  ESC-{  ^LeftArrow    Left  to first column.
+  F                    Forward forever; like "tail -f".
+  ESC-F                Like F but stop when search pattern is found.
+  r  ^R  ^L            Repaint screen.
+  R                    Repaint screen, discarding buffered input.
+        ---------------------------------------------------
+        Default "window" is the screen height.
+        Default "half-window" is half of the screen height.
+ ---------------------------------------------------------------------------
+
+                          SEARCHING
+
+  /pattern          *  Search forward for (N-th) matching line.
+  ?pattern          *  Search backward for (N-th) matching line.
+  n                 *  Repeat previous search (for N-th occurrence).
+  N                 *  Repeat previous search in reverse direction.
+  ESC-n             *  Repeat previous search, spanning files.
+  ESC-N             *  Repeat previous search, reverse dir. & spanning files.
+  ESC-u                Undo (toggle) search highlighting.
+  &pattern          *  Display only matching lines
+
+
+EMERGENCY MODE
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://medium.com/@nehamuthiyan/getting-out-of-the-emergency-mode-in-ubuntu-818180ce3940
+
+$ journalctl -xb
+#scorrere le pagine fino a raggiungere la partizione rovinata, nel mio caso /dev/sda3, si nota perchè l'errore è in rosso
+#dopo di che riavviare il pc da chiavetta o dvd "bootable" con qualsiasi versione di ubuntu .
+
+#avviare il terminale:
+ctrl-alt-t
+
+#scaricare e2fsck
+wget http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.43.1/e2fsprogs-1.43.1.tar.gz
+
+#dopo di che:
+tar xzf e2fsprogs-1.43.1.tar.gz
+cd e2fsprogs-1.43.1
+./configure
+make
+cd e2fsck/
+sudo ./e2fsck -y <corrupt filesystem name> 
+nel mio caso: sudo ./e2fsck -y /dev/sda3
+
+# sudo command  (sudo su, sudo su -, sudo -i ) https://askubuntu.com/questions/376199/sudo-su-vs-sudo-i-vs-sudo-bin-bash-when-does-it-matter-which-is-used
+https://it.wikipedia.org/wiki/Su_(Unix)
+sudo su -  
+# Specificando un trattino "-" si indica di avviare una shell di login
+# con -c "riga_di_comando" è possibile specificare loro un comando da eseguire:
+su root -c "mkdir /opt/esempio"
+# The command su is used to switch to another user (s witch u ser), 
+# but you can also switch to the root user by invoking the command with no parameter. 
+# su asks you for the password of the user to switch, 
+# after typing the password you switched to the user's environment.
+
+sudo - sudo 
+# is meant to run a single command with root privileges. 
+# But unlike su it prompts you for the password of the current user. 
+# This user must be in the sudoers file (or a group that is in the sudoers file). 
+# By default, Ubuntu "remembers" your password for 15 minutes, 
+# so that you don't have to type your password every time.
+
+sudo 
+# bash - A text-interface to interact with the computer. 
+# It's important to understand the difference between login, non-login, 
+# interactive and non-interactive shells:
+
+18.04
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#alternativa a gksudo:
+sudo su -
+
+da settare sempre 
+xhost si:localuser:root
+
+#dopo startere la app:
+gparted
+
+#Nautilus admin
+sudo nautilus -q
+
+STANDARD-OUT/IN
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+The numbers are file descriptors and only the first three (starting with zero) have a standardized meaning:
+
+0 - stdin
+1 - stdout
+2 - stderr
+
+e.g.:
+3>&1 1>&2 2>&3
+
+Each of these numbers refer to a file descriptor. 
+You can either redirect a file descriptor to a file with > or redirect it to another file descriptor with >&
+The 3>&1 will create a new file descriptor and redirect it to 1 which is STDOUT. 
+Now 1>&2 will redirect the file descriptor 1 to STDERR 
+and 2>&3 will redirect file descriptor 2 to 3 which is STDOUT.
+The & is needed to tell the shell you mean a file descriptor, not a file name
+
+https://askubuntu.com/questions/420981/how-do-i-save-terminal-output-to-a-file:
+
+redirect the output to a file:
+SomeCommand > SomeFile.txt  
+
+append data:
+SomeCommand >> SomeFile.txt
+
+If you want stderr as well use this:
+SomeCommand &> SomeFile.txt 
+
+or this to append:
+SomeCommand &>> SomeFile.txt  
+
+if you want to have both stderr and output displayed on the console and in a file use this:
+SomeCommand 2>&1 | tee SomeFile.txt
+
+(If you want the output only, drop the 2 above)
+
+https://askubuntu.com/questions/420981/how-do-i-save-terminal-output-to-a-file
+
+USER MANAGEMENTS
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# create user called "newuser" with home directory
+sudo useradd -m -s /bin/bash newuser
+
+# assign password to the "newuser" user
+sudo passwd newuser
+
+
+# see existing groups for the user
+groups newuser
+
+sudo addgroup gerrit
+sudo adduser newuser gerrit
+
+# alternative you can also use the usermod
+# command but without -a this removes the user
+# from existing groups
+
+# sudo usermod -aG gerrit newuser
+
+#Giving root access
+
+# add admin rights to the user "newuser"
+sudo adduser newuser admin
+
+# alternative "newuser" can be added to the sudo group
+sudo adduser newuser sudo
+
+# afterwards to may want to lock
+# the root user
+# CAREFUL!!!
+
+sudo passwd -l root
+
+
+# To change the default shell of the user to bash set the last entry of the corresponding user in the /usr/passwd file to /bin/bash. This is demonstrated in the 
+# following example.
+
+testuser:x:1001:1001::/home/testuser:/bin/bash
+
+
+SNAP
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#The commands that I use in this video tutorial are:
+#Snapweb 
+#per vedere on line gli snap
+sudo snap install snapweb 
+https://localhost:4201/access-control
+
+https://wiki.ubuntu-it.org/AmministrazioneSistema/InstallareProgrammi/PacchettiSnap
+sudo snap find trova 	
+snap changes - Visualizza la cronologia delle azioni compiute sui pacchetti.
+snap find nome-pacchetto - Cerca uno specifico pacchetto.
+snap help - Mostra l'elenco dei comandi disponibili.
+snap info nome-pacchetto - Mostra informazioni dettagliate riguardo ad uno snap.
+snap install nome-pacchetto - Installa un nuovo pacchetto. Va eseguito con i privilegi di amministrazione.
+snap interfaces - Elenca le interfacce del sistema e i programmi che le utilizzano.
+snap list - Visualizza la lista dei pacchetti installati.
+snap login mia@e-mail.com - Autentica su snap e sullo store tramite account Ubuntu One. Va eseguito con i privilegi di amministrazione.
+snap refresh nome-pacchetto Aggiorna uno specifico pacchetto. Va eseguito con i privilegi di amministrazione.
+snap remove nome-pacchetto - Rimuove uno specifico pacchetto. Va eseguito con i privilegi di amministrazione.
+snap version - Visualizza la versione di snap e snapd.
+man snap - Visualizza il manuale completo di snap.
+
+
+PROBLEMI 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Impossibile impostare il blocco /var/lib/apt/lists/lock 
+#In primis eliminiamo il file lock, con il comando
+sudo rm /var/lib/dpkg/lock
+#Ora ricostruiamo il database di dpkg con il comando
+sudo dpkg --configure -a
+#Ed eliminiamo eventuali tracce di installazioni a metà/dipendenze irrisolte (se ne restano), con il comando
+sudo apt -f install
+
+Impossibile impostare il blocco /var/cache/apt/archives/lock - open (11: Risorsa temporaneamente non disponibile)
+E: Impossibile bloccare la directory di scaricamento
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/cache/apt/archives/lock
+
+ebconf: DbDriver "config": /var/cache/debconf/config.dat is locked by another process: Resource temporarily unavailable
+sudo rm /var/cache/debconf/*.dat 
+
+
+C/C++
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#compilare C: 
+gcc pippo.c
+gcc -o prova pippo.c
+C++
+g++ -o prova prova.cpp
+
+
+#eseguire
+
+MYSQL
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+errore mysql-apparmor upgrade bloccato
+--aprire un altro terminale e digitare: 
+systemctl mysql status
+
+#Starting and Stopping the MySQL Server
+#The MySQL server is started automatically after installation. You can check the status of the MySQL server with the following command:
+sudo service mysql status
+
+#Stop the MySQL server with the following command:
+sudo service mysql stop
+
+#To restart the MySQL server, use the following command:
+sudo service mysql start
+
+#Dump database
+mysqldump -u user -p db_da_copiare > backup.sql
+
+#Ripristino database
+mysql -u user -p < backup.sql
+
+#To login
+mysql -u [username] -p [database]
+
+To login (from unix shell) use -h only if needed.
+# [mysql dir]/bin/mysql -h hostname -u username -ppassword
+To login (from windows)
+mysql dir/bin/mysql.exe -h hostname -u username -ppassword
+
+#Create a database.
+mysql> create database [databasename];
+
+#List all databases on the server.
+mysql> show databases;
+
+#Switch to a database.
+mysql> use [db name];
+
+#To see all the tables in the db.
+mysql> show tables;
+
+#To see table's field formats.
+mysql> describe [table name];
+
+#To delete a db.
+mysql> drop database [database name];
+
+#To delete a table.
+mysql> drop table [table name];
+
+#Show all data from a table.
+mysql> SELECT * FROM [table name];
+
+#To return columns and column information.
+mysql> show columns from [table name];
+
+#Show particular rows with the given value.
+mysql> SELECT * FROM [table name] WHERE [field name] = "value";
+
+
+
+HP Stampante
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#HP Scan
+hp-scan
+
+#scan a colori
+hp-scan -m color
+
+
+HP MAVEN
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Per pulire tramite eclipse
+mvn clean eclipse:clean 
+
+#Maven Eclipse
+Run as -> Maven build..
+eclipse:clean eclipse:eclipse
+
+#Maven 
+# per elencare l'alberatura delle dipendenze
+mvn dependency:tree
+
+#Creare un archetipo
+mvn -B archetype:generate \
+    -DarchetypeArtifactId=maven-archetype-webapp \
+    -DgroupId=it.html.tutorial.library \
+    -DartifactId=library
+
+#Per creare il jar The resulting .jar file will be placed in a new target
+mvn clean package
+
+#Eseguire il jar
+java -jar ./target/hola-docker-1.0.0-SNAPSHOT.jar
+
+#eseguire spring-boot in versione debug
+mvn spring-boot:run --debug
+
+#per esereguire un test
+./mvnw test -Dtest=RandomGeneratorServiceImplTest
+
+#per lanciare una applicazione spring boot
+mvnw spring-boot:run
+
+GIT
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# conoscere tutte le variabili di configurazione locali.
+git config -l
+
+# Lo strumento essenziale per guardare cos'è successo nel passato è il comando (stato dei commit)
+git log
+git log --pretty
+#semplificare la visualizzazione
+git log --oneline
+git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen (%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+
+#Inizializzare un repository
+git init
+
+#aggiungere un file modificato
+git add <nomefile> 
+#oppure per aggiungere tutte le modifiche al repository
+git add . 
+
+#per vedere le modifiche
+git diff
+
+#per vedere le modifiche
+git diff HEAD src/main/java/microservices/book/gateway/GatewayApplication.java
+
+git diff HEAD [filename] //  compare the working directory with local repository.
+git diff [filename] // compare the working directory with index.
+git diff --cached [filename] // compare the index with local repository.
+
+#Before push to confirm the changes
+git commit -m "Messaggio per la commit"
+
+#Use below before you push anything.
+git pull origin master 
+
+#push a un repository
+git remote add origin https://github.com/sabaja/ticket-management.git
+git push -u origin master
+
+#creare un nuovo branch develop e scaricarlo da remote
+git checkout -b develop origin/develop
+
+#force
+git push -f origin https://github.com/sabaja/jpa-spring-rest
+
+#how to view git index file
+git ls-files --stage
+
+#Il comando fetch scarica queste informazioni nel tuo repository locale ma non le unisce automaticamente e non modifica alcun file su cui stai lavorando. Scarica dalla #remote fetch URL configurata.
+git fetch https://github.com/sabaja/own-social-multiplication.git
+
+#effettua il merge in locale degli aggiornamenti scaricati da remoto con il comando git fetch.
+git merge
+
+#Vedere le modifiche prima di fare pull dal 
+git diff master origin/master
+
+#Il comando pull invece fa la fetch e la combina con una merge, quindi tenta di modificare i file locali automaticamente:
+git pull https://github.com/sabaja/own-social-multiplication.git
+
+#Crea un nuovo branch chiamato «develop» e passa al nuovo branch usando:
+git checkout -b develop
+
+#Fare merge da develop a master
+#(on branch development)
+git merge master #(resolve any merge conflicts if there are any)
+
+git checkout master
+git merge development #(there won't be any conflicts now)
+
+----
+rename git branch locally and remotely
+git branch -m old_branch new_branch         # Rename branch locally    
+git branch -m  gamification_feature_1.0.0 gamification_microservice
+
+git push origin :old_branch                 # Delete the old branch  
+git push origin :gamification_feature_1.0.0
+  
+git push --set-upstream origin new_branch   # Push the new branch, set local branch to track the new remote
+git push --set-upstream origin gamification_microservice
+---
+
+****
+Aggiornare branch locale con brach remoto:
+git pull origin master
+
+#If your default branch is different than master, you will need to specify the branch name:
+git pull origin my_default_branch_name
+***
+
+#Invialo al repository remoto:
+git push origin develop
+
+#Ritorna di nuovo su master:
+git checkout master
+
+#Confirm you are now working on that branch:
+git branch
+
+#Lista Checkout branch
+git branch -a
+
+#Checkout the branch you want to use.
+git checkout <feature_branch>
+
+#Cancella il branch creato in precedenza:
+$ git branch -d develop
+
+#Delete a remote GIT branch
+git push remote --delete <branch_name>
+git push origin --delete develop
+
+https://stackoverflow.com/questions/3899627/create-git-branch-with-current-changes/3899660
+#Creare un branch nuovo con le modifiche ancora non committate
+git checkout -b topic/newbranch
+
+git checkout -b topic/Feature_No_Oauth2_security_login
+
+#QUINDI se si cerca di fare un pull si ottiene il seguente errore fatal: The current branch feature/NEWBRANCH has no upstream branch. To push the current branch and set the #remote as upstream, use: git push --set-upstream origin feature/feature/NEWBRANCH
+#Quindi si devere fare:
+git push --set-upstream origin feature/feature/NEWBRANCH
+
+#Fare un merge:
+https://stackoverflow.com/questions/14168677/merge-development-branch-with-master
+
+#Differenza Merge Rebase
+https://www.atlassian.com/git/tutorials/merging-vs-rebasing
+
+https://git-scm.com/book/it/v1/Diramazioni-in-Git-Rifondazione
+#Rebase, collocarsi sul branch (in questo caso il master) che si vuole aggiornare: 
+#devo importare un commit da un altro branch e.g: develop e sono sul master:
+git rebase origin/topic/Feature_No_Oauth2_security_login
+
+
+#git bisect - Use binary search to find the commit that introduced a bug
+#Basic bisect commands: start, bad, good
+#As an example, suppose you are trying to find the commit that broke a feature that was known to work in version v2.6.13-rc2 of your project. You start a bisect session as# follows:
+
+      $ git bisect start
+      $ git bisect bad                 # Current version is bad
+      $ git bisect good v2.6.13-rc2    # v2.6.13-rc2 is known to be good
+
+
+copiare un repository esistente:
+git clone https://github.com/sabaja/own-social-multiplication
+
+copiare un branch particolare tipo develop
+git clone -b develop https://github.com/sabaja/own-social-multiplication
+
+----------
+Delete a local and a remote GIT branch
+https://koukia.ca/delete-a-local-and-a-remote-git-branch-61df0b10d323
+https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-both-locally-and-remotely
+git branch -d branch_name
+git branch -D branch_name
+----------
+
+
+--How do I commit only some files?
+You commit only the changed files by:
+
+git commit [some files]
+Or if you are sure that you have a clean staging area you can
+
+git add [some files]       # add [some files] to staging area
+git add [some more files]  # add [some more files] to staging area
+git commit                 # commit [some files] and [some more files]
+If you want to make that commit available on both branches you do
+per vedere tutti i commit sui branch:
+git log --all --oneline --graph --decorate
+
+git stash                     # remove all changes from HEAD and save them somewhere else
+git checkout <other-project>  # change branches
+git cherry-pick <commit-id>   # pick a commit from ANY branch and apply it to the current
+
+git checkout <first-project>  # change to the other branch
+git stash pop                 # restore all changes again
+
+
+--Come ritornare indietro a un commit:
+https://www.git-tower.com/learn/git/faq/restore-repo-to-previous-revision
+https://stackoverflow.com/questions/4114095/how-to-revert-a-git-repository-to-a-previous-commit
+1-vedere log history
+git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen (%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+--non tiene history
+git reset --hard 0ad5a7a6
+--tiene history
+git reset --soft 0ad5a7a6
+
+--mettere in un branch nuovo il vecchio branch
+git checkout -b old-project-state 0ad5a7a6
+
+--Push con un altro utente
+git push https://'sabaja':'Rinaldi1976'@github.com/sabaja/comandi-utili-linux
+
+
+
+SVN
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# the checkout command to check out a working copy from a repository.
+svn checkout http://svn.server.com/svn/project_repo --username=tom
+
+# If you want to view more information about the repository, then execute the info command.
+svn info
+
+#Fare checkout su progetto:
+-	Tasto destro mouse su cartella 
+-	SVN Checkout 
+-	Selezionare Trunk/Branches
+-	Premere ok
+
+#Commit:
+-	Tasto destro su branch (v3.3.8)
+-	Commit
+-	Selezionare le classi/oggetti da commitare
+-	Premere ok
+
+
+JENKINS
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.serverlab.ca/tutorials/linux/administration-linux/how-to-install-jenkins-on-ubuntu-18-04-bionic-beaver/
+#install
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo apt-add-repository "deb https://pkg.jenkins.io/debian-stable binary/"
+sudo apt update
+sudo apt install jenkins
+#Jenkins service will automatically start after the installation process is complete. You can verify it by printing the service status:
+systemctl status jenkins
+
+#password jenkins
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword  :  87acde69c8384faea2905dace837f064
+
+#Utente:   root
+#Password: rootroot
+
+# go to /etc/default/jenkins and add --httpPort=9999 
+
+#restart
+sudo service jenkins restart
+
+
+#remove
+sudo apt remove --purge jenkins
+sudo apt remove --auto-remove jenkins
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+af7f4a5ba00f43d9a5bfc0baac30749e
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+docker run \
+  --rm \
+  -u root \
+  -p 8080:8080 \
+  -v jenkins-data:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "$HOME":/home \
+  jenkinsci/blueocean
+
+
+BOOTCHART
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+sudo apt-get install bootchart pybootchartgui
+sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
+
+#Comando per vedere il tempo di avvio e i processi quanto ci mettono
+systemd-analyze plot > ~/Scrivania/plot.html
+
+#Comando per vedere il log del Boot
+gedit /var/log/boot.log
+
+#Comando per vedere caratteristiche PC
+inxi -zF
+
+#Comando per vedere avvio processi lenti
+systemd-analyze && systemd-analyze blame
+
+#Filesystem che può essere montato
+cat /etc/fstab
+
+#lists information about all available or the specified block devices. 
+lsblk
+
+ROOTKIT - Antivirus
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Aggiornare il programma e il database
+sudo rkhunter --update
+
+#Avviare
+sudo rkhunter -c
+
+sudo rkhunter -c --skip-keypress > rootkit.txt
+
+#Viene disabilitato il controllo sugli hash MD5.
+--disable hashes
+
+#Non vengono visualizzati messaggi aggiuntivi, ma solo il report dell'analisi del sistema.
+--report-mode
+
+#Esegue l'applicazione automaticamente a intervalli di tempo regolari.
+--cronjob
+
+#Evita di dover premere «ok» alla fine di ogni test.
+--skip-keypress
+
+#Risultato
+/var/log/rkhunter.log
+
+#Ativirus freshclamav 
+https://askubuntu.com/questions/417429/how-can-i-scan-for-possible-viruses-on-my-ubuntu-system
+
+I noticed that when you install clamav it runs freshclam in the background by default. I'm thinking that this is happening because when I tried to run freshclam I got a file lock exception due to another process accessing the log. So you will probably have to wait an hour or so after installing to run the update yourself if you feel that it is necessary. If you don't want to wait you can do sudo /etc/init.d/clamav-freshclam stop then start the update with sudo freshclam -v and when that finishes run sudo /etc/init.d/clamav-freshclam start
+sudo /etc/init.d/clamav-freshclam stop 
+
+Nella directory :
+/etc/apt/sources.list.d/
+
+inserire:
+-rw-r--r-- 1 root root  56 ago 14 16:01 getdeb.list
+-rw-r--r-- 1 root root  56 feb 14 22:23 getdeb.list.save
+che adesso sono sulla scrivania.
+
+TLP PER VENTOLA 16.04
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://askubuntu.com/questions/516067/persistent-high-fan-speed-ubuntu-14-04
+
+
+IMMAGINI DESKTOP
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/usr/share/backgrounds
+
+
+MONGODB:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Linux:
+If you installed via the package manager, 
+the data directory: /var/lib/mongodb 
+log directory: /var/log/mongodb  - are created during the installation.
+configuration file: /etc/mongod.conf
+27017 is the default port the standalone mongod listens on.
+----
+Windows:
+C:\Program Files\MongoDB\Server\4.2\bin\
+double-click on mongo.exe.
+----
+Linux:
+Start MongoDB.
+
+Issue the following command to start mongod:
+sudo service mongod start
+
+Verify that the mongod process has started successfully by checking the contents of the log file at /var/log/mongodb/mongod.log for a line reading
+tail -f /var/log/mongodb/mongod.log 
+response:
+initandlisten] waiting for connections on port 27017
+
+Stop MongoDB
+As needed, you can stop the mongod process by issuing the following command:
+sudo service mongod stop
+
+Restart MongoDB
+sudo service mongod restart
+
+Begin using MongoDB.
+Start a mongo shell on the same host machine as the mongod. Use the --host command line option to specify the localhost address (in this case 127.0.0.1) and port that the mongod listens on:
+mongo --host 127.0.0.1:27017
+
+Later, to stop MongoDB, press Control+C in the terminal where the mongod instance is running.
+
+#start shell
+mongo --shell
+
+#clear shell
+cls
+#(clear screen)
+Ctrl+l 
+
+
+Aliases:
+#start mongo
+start_mong='sudo service mongod start'
+#stop mong
+stop_mong='sudo service mongod stop'
+#restart mong
+rest_mong='sudo service mongod restart'
+#status mongo
+stat_mong='tail -f /var/log/mongodb/mongod.log'
+#admin_mongo
+mongo --port 27017 -u "admin" -p "1234" --authenticationDatabase "admin"
+
+users:
+use admin
+db.createUser(
+  {
+    user: "admin",
+    pwd: "1234",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+#start the mongod instance with the --auth command line option or, if using a configuration file, the security.authorization setting.
+mongod --auth --port 27017 --dbpath /data/db1
+
+#Start a mongo shell with the -u <username>, -p <password>, and the --
+mongo --port 27017 -u "admin" -p "1234" --authenticationDatabase "admin"
+
+#mongo shell https://docs.mongodb.com/manual/reference/mongo-shell/
+help
+
+Mongo Query Commands:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#lista tutte le collections
+show collections
+-	quote
+-	user
+
+
+#Mostra i nomi dei database, il numero delle collection e documents nel database e altre info.
+db.stats() 
+
+- {
+	"db" : "test",
+	"collections" : 2,
+	"views" : 0,
+	"objects" : 5195,
+	"avgObjSize" : 527.8900866217517,
+	"dataSize" : 2742389,
+	"storageSize" : 1695744,
+	"numExtents" : 0,
+	"indexes" : 2,
+	"indexSize" : 98304,
+	"fsUsedSize" : 38916304896,
+	"fsTotalSize" : 412714770432,
+	"ok" : 1
+}
+
+#MONGO SHELL STATEMENTS:
+#You can switch to non-existing databases. When you first store data in the database, such as by creating a collection, MongoDB creates the database. For example, the #following creates both the database myNewDatabase and the collection myCollection during the insert() operation:
+
+use myNewDatabase
+db.myCollection.insert( { x: 1 } );
+
+#bulk insert:
+db.websites.insertMany([
+	{name: "Test – Html.it", _id: "http://www.html.it/development/test", tags: "Test", clicks: 45 }, 
+	{name: "AM – Html.it", _id: "http://www.html.it/development/am", tags: "AM", clicks: 1356 }, 
+	{name: "Jour – Html.it", _id: "http://www.html.it/development/jour", tags: "Jour", clicks: 514351 }, 
+	{name: "Sys – Html.it", _id: "http://www.html.it/development/sys", tags: "Sys", clicks: 512 }, 
+	{name: "Docs – Html.it", _id: "http://www.html.it/development/docs", tags: "Docs", clicks: 1 }
+]);
+
+#To format the printed result, you can add the .pretty() to the operation, as in the following:
+db.myCollection.find().pretty()
+
+#Se vogliamo effettuare una proiezione, ovvero se non ci interessano interi documenti ma solamente alcuni campi, la sintassi del metodo find prevede un ulteriore parametro:
+db.websites.find(  { name: /Dev/ }, { _id: 1, clicks: 1 } )
+
+#introdurre un limite al numero di documenti restituiti:
+db.websites.find(  { clicks: { $lt: 5000 } }, { _id: 1, clicks: 1 } ).limit(10)
+#Altri operatori tipici sono:
+ $gt (maggiore);
+ $ne (non uguale a);
+ $in (ricerca di un valore all’interno di un array).
+
+#Embedded Query on Nested Field ("field.nestedField").
+db.inventory.find( { "size.uom": "in" } )
+db.inventory.find( { "size.h": { $lt: 15 } } )
+#Specify AND Condition
+db.inventory.find( { "size.h": { $lt: 15 }, "size.uom": "in", status: "D" } )
+
+##Array:
+db.inventory.find( { tags: "red" } )
+db.inventory.find( { tags: { $all: ["red", "blank"] } } )
+db.inventory.find( { dim_cm: { $gt: 25 } } )
+db.inventory.find( { dim_cm: { $gt: 15, $lt: 20 } } )
+#The following example queries for all documents where the second element in the array dim_cm is greater than 25 (When querying using dot notation, the field and nested field must be inside quotation marks.)
+db.inventory.find( { "dim_cm.1": { $gt: 25 } } )
+#Use $elemMatch operator:
+db.inventory.find( { dim_cm: { $elemMatch: { $gt: 22, $lt: 30 } } } )
+#Use the $size operator to query for arrays by number of elements.
+db.inventory.find( { "tags": { $size: 3 } } )
+
+##Projections:
+#A projection can explicitly include several fields by setting the <field> to 1 in the projection document. The following operation returns all documents that match the #query. In the result set, only the item, status and, by default, the _id fields return in the matching documents.
+db.inventory.find( { status: "A" }, { item: 1, status: 1 } )
+Suppress _id Field:
+db.inventory.find( { status: "A" }, { item: 1, status: 1, _id: 0 } )
+Return All But the Excluded Fields
+db.inventory.find( { status: "A" }, { status: 0, instock: 0 } )
+Return Specific Fields in Embedded Documents
+db.inventory.find(
+   { status: "A" },
+   { item: 1, status: 1, "size.uom": 1 }
+)
+#Suppress
+db.inventory.find(
+   { status: "A" },
+   { "size.uom": 0 }
+)
+##Project Specific Array Elements in the Returned Array
+#For fields that contain arrays, MongoDB provides the following projection operators for manipulating arrays: $elemMatch, $slice, and $.
+#The following example uses the $slice projection operator to return the last element in the instock array:
+db.inventory.find( { status: "A" }, { item: 1, status: 1, instock: { $slice: -1 } } )
+#$elemMatch, $slice, and $ are the only way to project specific elements to include in the returned array. For instance, you cannot project specific array elements using the #array index; e.g. { "instock.0": 1 } projection will not project the array with the first element.
+
+#Write Concern
+Inserimento di dati: insert
+db.users.insert([
+                   {_id: "user1@html.it" , name: "User 1", logins: 31, lastAccess: new Date(2014, 10, 7) },
+                   {_id: "user2@html.it" , name: "User 2" }
+                ],
+                { writeConcern: { w: 0 }
+});
+
+##UPDATE:
+db.users.update(
+    { name: "User 1" },
+    {
+        $inc: { logins: 1},
+        $set: { lastAccess: new Date(2014, 10, 8) }
+    }
+)
+$inc abbiamo richiesto di incrementare i campi indicati
+$set abbiamo voluto modificare i campi specificati successivamente
+$unset, che elimina il campo dal documento
+lista completa:
+
+Name	Description
+$currentDate	Sets the value of a field to current date, either as a Date or a Timestamp.
+$inc	Increments the value of the field by the specified amount.
+$min	Only updates the field if the specified value is less than the existing field value.
+$max	Only updates the field if the specified value is greater than the existing field value.
+$mul	Multiplies the value of the field by the specified amount.
+$rename	Renames a field.
+$set	Sets the value of a field in a document.
+$setOnInsert	Sets the value of a field if an update results in an insert of a document. Has no effect on update operations that modify existing documents.
+$unset	Removes the specified field from a document.
+
+
+(upsert):
+db.users.update(
+    { name: "User 3" },
+    { _id: "user3@html.it", name: "User 3", lastAccess : new Date() },
+    {upsert: true }
+)
+
+db.books.update({ $currentDate: { date : "timestamp" } }, {multi : true});
+
+
+
+Se questo comando trova un utente con nome User 3, lo rimpiazza con il documento specificato nel secondo parametro; altrimenti lo crea ex-novo.
+
+upsert	Se valorizzato a true, consente di effettuare l’inserimento se nessun documento è stato trovato con le caratteristiche indicate. Di default è false
+multi	Se valorizzato a true, consente di specificare se l’update è massivo, o va fatto solo sul primo documento trovato. Di default è false
+writeConcern	Per specificare il Write Concern, come abbiamo visto con il comando insert
+
+#Alter Collection massivo
+db.books.aggregate( { $addFields: { date:  new Date("<YYYY-mm-ddTHH:MM:ssZ>")} });
+db.books.aggregate( { $addFields: { $currentDate: { date : "timestamp" } } });
+
+
+##REMOVE:
+Il comando remove:
+
+
+#Iterazioni:
+for(var i=1; i<=20000; i++) 
+{ 
+	db.books.insert(
+		{ isbn: 223456 + i + '', title : "book " + i }
+	); 
+}
+
+DOCKER
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04 
+https://docker-curriculum.com/
+
+#Installare con il repository
+https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
+
+#Docker repo instead of the default Ubuntu 16.04 repo
+apt-cache policy docker-cesudo service docker start
+
+#Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it's running:
+sudo systemctl status docker
+
+#Per aggiungere sabaja al docker group (non si deve digitare più sudo)
+sudo usermod -aG docker sabaja
+su - sabaja
+id -nG
+
+#https://docs.docker.com/v17.09/engine/installation/linux/linux-postinstall/#configure-docker-to-start-on-boot
+#Abilitare allo startup
+sudo systemctl enable docker
+
+#disabilitare lo startup
+sudo systemctl disable docker
+
+#Per far partire il daemon di docker:
+#After the installation finishes, Docker usually starts up on its own, but for the next part to work you will need to stop it.
+
+sudo service docker stop
+#Then run the daemon with the following command:
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+
+#install a specifi CE of Docker
+18.06.3~ce~3-0~ubuntu 
+sudo apt install docker-ce=18.06.3~ce~3-0~ubuntu docker-ce-cli=18.06.3~ce~3-0~ubuntu containerd.io
+
+#########################PER FAR PARTIRE DOCKER##########################################
+sudo service docker start
+
+#########################PER DISINSTALLARE DOCKER########################################
+## https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker ############
+#Step 1
+dpkg -l | grep -i docker
+sudo apt purge -y docker-engine docker docker.io docker-ce docker-ce-cli
+sudo apt autoremove -y --purge docker-engine docker docker.io docker-ce docker-ce-cli
+sudo rm -rf /var/lib/docker
+sudo rm /etc/apparmor.d/docker
+sudo groupdel docker
+sudo rm -rf /var/run/docker.sock
+sudo rm -rf /etc/systemd/system/docker.service
+sudo rm -rf /etc/docker
+sudo rm -rf /run/docker
+sudo rm -rf /run/snapd/lock/docker.lock
+
+
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+#Docker info
+docker info
+
+may be sudo for Ubuntu
+#hello-world
+docker run hello-world
+
+#To try something more ambitious, you can run an Ubuntu container with:
+docker run -it ubuntu bash
+
+
+#run ubuntu bash
+docker run -it ubuntu bash
+
+#to search for the Ubuntu image, type:
+docker search ubuntu
+
+#The pull command fetches the busybox image
+docker pull busybox
+
+#Run BusyBox shell
+docker run -it --rm busybox
+
+#examples:
+docker run busybox printf "%s\n" echo -e "\xaa"
+
+#to see a list of all images on your system.
+docker images
+
+#The docker ps command shows you all containers that are currently running.
+docker ps
+
+#list of all containers  containers — active and inactive that we ran.
+docker ps -a
+ 
+#To view the latest container you created, pass it the -l switch:
+docker ps -l
+
+#Stopping a running or active container is as simple as typing:
+docker stop container-id
+#The container-id can be found in the output from the docker ps command.
+
+Se non si ferma:
+#After a VM restart, I ran lsmod | grep overlay again to confirm overlay kernel module is loaded. After seeing it there, I added --storage-driver=overlay flag to the #DOCKER_OPTS line inside my docker config file (/etc/default/docker) and ran the below commands to restart docker:
+
+sudo /etc/init.d/docker stop
+sudo /etc/init.d/docker start
+
+#run busybox bash
+docker run -it  busybox sh  --- output:
+bash-command:/ # ls -l
+bin   dev   etc   home  proc  root  sys   tmp   usr   var
+
+bash-command:/ # uptime
+14:39:30 up 17:20,  0 users,  load average: 0.01, 0.04, 0.03
+
+Danger Zone: If you're feeling particularly adventurous you can try rm -rf bin in the container.
+Make sure you run this command in the container and not in your laptop/desktop.
+Doing this will not make any other commands like ls, echo work.
+Once everything stops working, you can exit the container (type exit and press Enter)
+and then start it up again with the docker run -it busybox sh command.
+Since Docker creates a new container every time, everything should start working again.
+
+#use docker run --help
+docker run --help
+
+#Dopo usati i contenitori bisogna eliminarli:
+docker ps -a (per elencarli)
+ 
+#per eliminarli uno a uno:
+docker rm b654588613df e744045b1a00 e744045b1a00
+
+#per eliminarli tutti insieme:
+docker rm $(docker ps -a -q -f status=exited)
+
+#sulle ultime versioni di doker:
+docker container prune
+
+
+#To save the state of the container as a new image, first exit from it:
+exit
+#commit:
+docker commit -m "What did you do to the image" -a "Author Name" container-id repository/new_image_name
+example:
+docker commit -m "added node.js" -a "Thuesday Jacopo" a63128d2dff8 repo/ubuntu-nodejs
+response:
+sha256:ab035e7afa47738710ccfd5ce8ad8a361e7279b604444b98dcd29ff7a2e88a4b
+
+DA CONTINUARE continue:
+Step 8 — Pushing Docker Images to a Docker Repository
+
+Per lanciare jenkins/blueoceans
+docker run \
+  --rm \
+  -u root \
+  -p 8080:8080 \
+  -v jenkins-data:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "$HOME":/home \
+  jenkinsci/blueocean
+
+ZIPKIN
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Per scaricare:
+curl -sSL https://zipkin.io/quickstart.sh | bash -s
+
+per laciarlo:
+java -jar zipkin.jar
+
+per visualizzare:
+http://your_host:9411 to find traces!
+
+
+Running from Source:
+# get the latest source
+git clone https://github.com/openzipkin/zipkin
+cd zipkin
+# Build the server and also make its dependencies
+./mvnw -DskipTests --also-make -pl zipkin-server clean install
+# Run the server
+java -jar ./zipkin-server/target/zipkin-server-*exec.jar
+
+CERT - JAVA
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Aprire portcecle Keytool:
+Andate nella directory creata e fate partire Portecle usando il comando
+java -jar portecle.jar
+
+directory certificati:
+/home/sabaja/.keystore
+
+per creare un certificato tomcat:
+keytool -genkey -alias tomcat -keyalg RSA -storepass changeit -keypass changeit -dname 'CN=tomcat'
+
+#You can run the following command to list the content of your keystore file:
+keytool -list -keystore .keystore
+
+#if you are looking for a specific alias, you can also specify it in the command:
+keytool -list -keystore .keystore -alias foo
+
+
+JAVA
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+la lista completa dei JDK installati
+per vedere le jdk installate sul pc e il percorso:
+sudo update-java-alternatives --list
+
+oppure
+
+update-alternatives --list java
+
+Per settare java 9 come default:
+To set Oracle JDK9 as default, install the "oracle-java9-set-default" package.
+E.g.: sudo apt install oracle-java9-set-default.
+
+directory java:
+/usr/lib/jvm/java-8-oracle
+
+Versione:
+java -version
+
+scegliere quale JDK utilizzare di default lanciando da terminale il seguente comando:
+sudo update-alternatives --config java
+
+Settare JAVA_HOME:
+sudo nano /etc/environment
+
+echo $JAVA_HOME
+
+JAVA_HOME="/usr/lib/jvm/java-11-oracle"
+
+JRE = /usr/lib/jvm/java-11-oracle/lib/jrt-fs.jar
+
+JAXB: 
+---------------------------------------------------------------------------------------------------
+https://docs.oracle.com/javase/8/docs/technotes/tools/unix/xjc.html
+cd C:\Program Files\Java\jdk1.8.0_131\bin 
+C:\Program Files\Java\jdk1.7.0_80\bin> xjc -d C:\Users\sabatinija\Desktop\mastercard-workspace\XSDProva\src\com\domain C:\Users\sabatinija\Desktop\mastercard-workspace\XSDProva\src\mdr_responses.xsd
+
+> xjc -d C:\Users\sabatinija\Desktop\XSD_prova C:\Users\sabatinija\Desktop\mastercard-workspace-2\connector\src\main\xsd\CaseFilingResponse.xsd
+
+> xjc -d C:\Users\sabatinija\Desktop\XSD_prova C:\Users\sabatinija\Desktop\mastercard-workspace-2\connector\src\main\xsd\CaseFilingResponse.xsd
+
+
+ZipKin
+https://zipkin.io/pages/quickstart
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Ubuntu:
+#Running from Docker
+docker run -d -p 9411:9411 openzipkin/zipkin
+
+##Running from Java
+cd ~/Scrivania/Dev-space
+java -jar zipkin.jar
+
+##Running from source
+# get the latest source
+git clone https://github.com/openzipkin/zipkin
+cd zipkin
+
+# Build the server and also make its dependencies
+./mvnw -DskipTests --also-make -pl zipkin-server clean install
+
+# Per generare lo swagger
+mvn clean compile -Pcompiler
+ 
+# Run the server
+java -jar ./zipkin-server/target/zipkin-server-*exec.jar
+
+#Regardless of how you start Zipkin, browse to 
+
+http://localhost:9411 
+
+
+RabbitMQ
+https://www.rabbitmq.com/install-debian.html
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Start rabbitmq
+sudo service rabbitmq-server start
+
+#Stop rabbitmq-server
+sudo rabbitmqctl stop 
+
+#Status rabbitmq-server
+sudo rabbitmqctl status
+
+#Listing queues
+sudo rabbitmqctl list_queues
+
+#Broker user:
+guest
+#Broker pass:
+guest
+
+#Output from the server is sent to a RABBITMQ_NODENAME.log file in the RABBITMQ_LOG_BASE directory. 
+Additional log data is written to RABBITMQ_NODENAME-sasl.log.
+
+#RabbitMQ management
+https://www.rabbitmq.com/management.html
+#abilitare management:
+sudo rabbitmq-plugins enable rabbitmq_management
+
+#Broker user:
+guest
+#Broker pass:
+guest
+
+RabbitMQ management console:
+http://localhost:15672/
+
+#RabbitMQ
+--------------------------------------------
+#Windows:
+cd C:\Program Files\RabbitMQ Server\rabbitmq_server-3.7.9\sbin
+
+# Run the following command to enable the plugin:
+rabbitmq-plugins.bat enable rabbitmq_management
+
+#Then, re-install the RabbitMQ service using the commands below:
+rabbitmq-service.bat stop  
+rabbitmq-service.bat install  
+rabbitmq-service.bat start 
+
+#WIRESHARK on 18.04
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Now if you selected <Yes> in the earlier section to run Wireshark without root access, then run the following command to add your user to the wireshark group:
+sudo usermod -aG wireshark $(whoami)
+sudo reboot
+
+Now that Wireshark is installed, you can start Wireshark from the Application Menu of Ubuntu.
+$ wireshark
+
+#ANSIBLE
+https://www.miamammausalinux.org/2018/02/primi-passi-con-ansible-parte-1/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Inventory: Si tratta della lista di macchine sulle quali Ansible può operare ed il path in cui risiede di default: /etc/ansible/hosts 
+
+#Moduli: i moduli possono essere visti come i comandi che eseguiamo sulle macchine. lista completa: https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+
+#Task: i task sono le operazioni che, di fatto, eseguiamo sulle macchine. Possono essere visti come la serie di comandi, in sequenza, che verranno lanciati sulla macchina. Un task è nella sostanza il richiamo di un modulo con particolari opzioni.
+
+#Handler: le operazioni associate agli handler si differenziano dai task poiché non vengono sempre eseguite, ma vengono richiamate come reazione ad un evento di un task. Un banale esempio è quello di avviare un servizio dopo aver installato il software necessario, o riavviarlo dopo la modifica del suo file di configurazione.
+
+#Playbook: i playbook sono una lista di task, handler e delle relative variabili legati a particolari gruppi di macchine in inventario. Vengono utilizzati per avere il “manuale di istruzioni” delle operazioni che Ansible dovrà eseguire.
+
+#Roles: i ruoli sono dei componenti dei playbook che raggruppano operazioni legate tra di loro con uno scopo specifico. Queste vengono di solito unificate per avere più riusabilità delle stesse. Ad esempio, l’installazione, la configurazione e la gestione del servizio NTP possono essere raggruppate in un ruolo, avendo la possibilità di riutilizzare questo ruolo in diversi Playbook.
+
+#Tutto il codice Ansible (e, volendo, anche l’inventario) è scritto in sintassi YAML, che permette una semplice scrittura e lettura del codice con qualisasi editor di testo. Il formato YAML ha precise regole: ad esempio la tabulazione non è accettata, in favore di un’indentazione a 2 spazi.
+YAML: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+
+#USO DI ANSIBLE
+Per prima cosa, quindi, dobbiamo assicurarci che l’host sul quale girerà Ansible possa accedere via ssh senza password ai sistemi in inventario. Generiamo quindi la coppia di chiavi sull’host controller:
+$ ssh-keygen -t rsa
+
+#APACHE KAFKA
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#home kafka linux:
+/home/sabaja/Scrivania/Dev-space/Kafka/kafka_2.12-2.2.0
+
+#Start the server:
+#Zookeper:
+bin/zookeeper-server-start.sh config/zookeeper.properties
+#server:
+bin/kafka-server-start.sh config/server.properties
+
+#Create a topic
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic testc
+#check:
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+#Send some messages:
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+message:This is a message
+message:This is another message
+
+#Start a consumer:
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+#Setting up a multi-broker cluster:
+#First we make a config file for each of the brokers (on Windows use the copy command instead):
+
+1 > cp config/server.properties config/server-1.properties
+2 > cp config/server.properties config/server-2.properties
+
+
+#To see that run the "describe topics" command:
+bin/kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic my-replicated-topic
+
+#Use Kafka Connect to import/export data
+
+
+#JETTY
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+http://zetcode.com/java/jetty/install/
+
+JETTY HOME: /opt/jetty
+
+A new jetty user and group are added to the system. Jetty will run under this user on the system. Setting the user's shell to /bin/false has the affect of not allowing someone to log in under this username:
+sudo useradd --user-group --shell /bin/false --home-dir /opt/jetty/temp jetty
+
+/opt/jetty/web/base will hold the Jetty base, 
+/opt/jetty/temp will be used for temporary files of Jetty.
+
+Cambiare utenza cartelle
+sudo chown -R jetty:jetty /opt/jetty/web/base
+sudo chown -R jetty:jetty /opt/jetty
+
+Modifichiamo la proprietà dell'utente e del gruppo per i file e le directory rilevanti per Jetty. L'opzione -R opera in modo ricorsivo su file e directory, il che significa che la proprietà viene modificata per tutte le directory e i file nelle directory madri.
+
+jetty start: sudo service jetty start
+
+java -jar /opt/jetty/start.jar --add-to-start=http,deploy,resources,ext,jmx,requestlog,console-capture,annotations,jsp
+
+funziona start:
+java -jar $JETTY_HOME/start.jar
+
+
+If you want to see what the Jetty base looks like without executing Jetty, you can simply list the configuration by using the --list-config command.
+java -jar $JETTY_HOME/start.jar --list-config
+
+Help console:
+help, h, ? <arg>    Shows a list of commands and provides help for each command.
+memory, m <arg>     Memory utilities.
+thread, t <arg>     Thread information.
+prop, p <arg>       Manage system properties.
+echo, e <arg>       Prints the text.
+mbean, mb <arg>     Access local MBeans.
+open, o             Opens a browser.
+dump, d             Dump the state of Jetty.
+info, i             Show the launcher info.
+restart, r          Restarts the server.
+stop, s             Stops the server gracefully.
+exit, x             Exits the VM.
+
+IntelliJ
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Home ubuntu:
+/snap/intellij-idea-community
+#Lib ubuntu:
+/snap/intellij-idea-community/163/lib
+
+#SHORTCUTS:
+#new object:
+alt+INS
+
+#Create TestClass / create Subclass / ... 
+alt+Enter
+
+#creating getter setter:
+Alt+Insert
+
+#delete row:
+Ctrl+Y
+
+#Refactor
+Ctrl+Shift+Alt+T
+
+#Sorround with
+Ctrl+Alt+T
+
+#Format Code
+Ctrl+Alt+L
+linux: Ctrl+Alt+SHIFT+F
+
+#Project View
+Alt+1
+
+#Finestra di run output 
+Ctrl + SHIFT + '
+
+#Search everywhere
+DOUBLE SHIFT
+
+#Recet Files
+CTRL+E
+
+#Navigation Bar
+Alt+Home
+
+# to quickly move between methods in the editor
+Alt+UP arrow 
+Alt+DOWN arrow
+
+#search file, or symbol:
+Ctrl+Shift+Alt+N	
+
+#Optimize imports
+Ctrl+Alt+O
+
+#Extract method
+Ctrl+Alt+M
+
+#Extract variable
+Ctrl+Alt+V
+
+#Organize Imports
+CTRL + SHIFT + O 
+
+#Structure Class
+ALT + 7
+
+#to see the declaration of the current method without the need to scroll to it.
+Alt+Q 
+
+#Find
+CTRL + F
+
+#Find and replace
+CTRL + R
+
+#Find usage
+ALT + F7
+
+#Find in project
+#Highlight every recurrence variable
+CTRL+SHIFT+F7
+
+#Find a class by name (Go to Class by Name)
+CTRL + N
+
+#FInd/Go to file
+CTRL+SHIFT+N
+
+#Search and Replace IN WHOLE PROJECT
+#Find and Replace IN WHOLE PROJECT
+Ctrl + Shift + F
+Ctrl + Shift + R
+
+#Finds any file or directory by name: 
+Ctrl+Shift+N
+
+#Find a class:
+Ctrl+N
+
+#Jump to Previous View Location (Navigate back/forward) in IntelliJ IDEA
+#to go back to previous location
+Ctrl+alt+left arrow 
+#to go forward.
+Ctrl+alt+right arrow 
+Alt + Shift + ← (Left Arrow)
+or
+Ctrl + E (Recent Files pop-up).
+Also check:
+Ctrl + Shift + E (the Recently Edited Files pop-up).
+
+#Navigating between test and test subject
+Ctrl+Shift+T
+
+#Extend selection, seleziona una parola, poi uno statement, poi un method etc.
+Ctrl+W
+#Processo inverso
+Ctrl+Shift+W
+
+#It is used to go to the location of the last edit
+Ctrl + Shift + Backspace
+
+#The Extract Variable refactoring helps you simplify complicated statements in your code. 
+#For example, in the code fragment below, you can select an expression in the code:
+#(Refactor | Extract | Variable...)
+Ctrl+Alt+V 
+
+#Completa casting
+Ctrl + SHIFT + barra spaziatrice 
+
+#Goto implementation of interface
+Ctrl+Alt+B
+
+#Recent file
+Ctrl+E
+
+
+#########DEBUG
+#Run in debug mode
+Shift+F9
+#Step Over
+F8
+#Step Into
+F7
+#Force Step Into
+ALT+SHIFT+F7
+#Step Out
+SHIFT+F8
+
+#evaluate some expression
+Alt+SHIFT+F8
+
+
+REGEX
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\b(?!,)\t\b = trova \t ma no ,\t : bisogna utilizzare Negative look ahead a(?!b) a ma non ab
+
+
+HTTPS/private key security
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+accedere alla cartella /home/sabaja/Desktop/Dev-Space/Security/HTTPS/prova-crypt
+ci sono 2 cartelle client e server, simulo una chiamata client a un server 
+dove il cliente invia un messaggio criptato tramite chiave pubblica
+e SERVER decripterà il messaggio tramite chiave privata.
+La chiave pubblica è prodotta sulla base della chiave privata.
+
+#generazione chiave privata con algoritmo RSA e criptazione a 2048 bits, -out private_key.pem è nome file
+openssl genpkey --algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+
+#generazione chiave pubblica con chiave privata in riferimento
+openssl rsa -pubout -in private_key.pem -out public_key.pem
