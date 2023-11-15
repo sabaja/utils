@@ -1135,6 +1135,10 @@ git checkout -b old-project-state 0ad5a7a6
 git push https://'sabaja':'Rinaldi1976'@github.com/sabaja/comandi-utili-linux
 
 
+GIT SSH
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ssh-keygen -t rsa -b 4096 -C "jacoposabatini76@gmail.com"
+
 
 SVN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2115,13 +2119,20 @@ REGEX
 HTTPS/private key security
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 accedere alla cartella /home/sabaja/Desktop/Dev-Space/Security/HTTPS/prova-crypt
+https://www.youtube.com/watch?v=Y-Oqh5ZEHXU
 ci sono 2 cartelle client e server, simulo una chiamata client a un server 
 dove il cliente invia un messaggio criptato tramite chiave pubblica
-e SERVER decripterà il messaggio tramite chiave privata.
-La chiave pubblica è prodotta sulla base della chiave privata.
+Il SERVER decripterà il messaggio tramite chiave privata.
 
+#La chiave pubblica è prodotta sulla base della chiave privata.
 #generazione chiave privata con algoritmo RSA e criptazione a 2048 bits, -out private_key.pem è nome file
 openssl genpkey --algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
 
 #generazione chiave pubblica con chiave privata in riferimento
 openssl rsa -pubout -in private_key.pem -out public_key.pem
+
+per criptare un file con una chiave pubblica e salvarlo con un altro nome:
+openssl rsautl -encrypt -in message.txt -out message_encrypted.txt -pubin -inkey public_key.pem
+
+per decriptare 
+openssl rsautl -decrypt -in message_encrypted.txt -out message.txt -inkey private_key.pem
