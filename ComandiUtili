@@ -2118,8 +2118,9 @@ REGEX
 
 HTTPS/private key security
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-accedere alla cartella /home/sabaja/Desktop/Dev-Space/Security/HTTPS/prova-crypt
 https://www.youtube.com/watch?v=Y-Oqh5ZEHXU
+
+accedere alla cartella /home/sabaja/Desktop/Dev-Space/Security/HTTPS/prova-crypt
 ci sono 2 cartelle client e server, simulo una chiamata client a un server 
 dove il cliente invia un messaggio criptato tramite chiave pubblica
 Il SERVER decripterà il messaggio tramite chiave privata.
@@ -2136,3 +2137,19 @@ openssl rsautl -encrypt -in message.txt -out message_encrypted.txt -pubin -inkey
 
 per decriptare 
 openssl rsautl -decrypt -in message_encrypted.txt -out message.txt -inkey private_key.pem
+
+RSA e Firma Digitale - Come funzionano?
+https://www.youtube.com/watch?v=gswU7eT_DdM
+
+Chiavi ssh
+https://www.youtube.com/watch?v=6if7-0i1ykk
+
+Come usare le chiavi SSH
+https://www.youtube.com/watch?v=KLJHDYFozLc
+
+APACHE BENCHMARK
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://httpd.apache.org/docs/2.4/programs/ab.html
+https://installati.one/install-apache2-utils-ubuntu-20-04/
+
+ab -v
