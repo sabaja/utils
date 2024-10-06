@@ -53,6 +53,7 @@ sudo groupadd docker
 
 #Add your user to the docker group.
 sudo usermod -aG docker sabaja
+sudo usermod -aG docker $USER
 
 #Per rendere subito attivo senza fare logout
 exec su -l sabaja
@@ -684,20 +685,6 @@ sudo
 # It's important to understand the difference between login, non-login, 
 # interactive and non-interactive shells:
 
-18.04
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#alternativa a gksudo:
-sudo su -
-
-da settare sempre 
-xhost si:localuser:root
-
-#dopo startere la app:
-gparted
-
-#Nautilus admin
-sudo nautilus -q
-
 STANDARD-OUT/IN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 The numbers are file descriptors and only the first three (starting with zero) have a standardized meaning:
@@ -776,8 +763,23 @@ sudo passwd -l root
 # To change the default shell of the user to bash set the last entry of the corresponding user in the /usr/passwd file to /bin/bash. This is demonstrated in the 
 # following example.
 
-testuser:x:1001:1001::/home/testuser:/bin/bash
+testuser:x:1001:1001::/home/testuser:/bin/------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How to kill a process running on particular port in Linux?
+Come uccidere/bloccare un processo eseguito su una particolare porta
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+To list any process listening to the port 8080:
 
+lsof -i:8080
+To kill any process listening to the port 8080:
+
+kill $(lsof -t -i:8080)
+or more violently:
+
+kill -9 $(lsof -t -i:8080)
+
+REGEX
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\b(?!,)\t\b = trova \t ma no ,\t : bisogna utilizzare Negative look ahead a(?!b) a ma non ab
 
 SNAP
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -939,6 +941,7 @@ mvn spring-boot:run --debug
 mvnw spring-boot:run
 
 GIT
+git-token=WjLOpmslfyXf7KAmrwcPI/UOUUHTOiJkkkJCjjvzrhE
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # conoscere tutte le variabili di configurazione locali.
 git config -l
@@ -1542,6 +1545,7 @@ sudo systemctl status docker
 
 #Per aggiungere sabaja al docker group (non si deve digitare più sudo)
 sudo usermod -aG docker sabaja
+sudo usermod -aG docker $USER
 su - sabaja
 id -nG
 
@@ -1584,6 +1588,24 @@ sudo rm -rf /run/snapd/lock/docker.lock
 
 sudo apt-get remove docker docker-engine docker.io containerd runc
 
+****
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Authenticate to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+***
+
+
+
 #Docker info
 docker info
 
@@ -1592,13 +1614,9 @@ may be sudo for Ubuntu
 docker run hello-world
 
 #To try something more ambitious, you can run an Ubuntu container with:
-docker run -it ubuntu bash
-
-
+docker run -it ubuntu 
 #run ubuntu bash
-docker run -it ubuntu bash
-
-#to search for the Ubuntu image, type:
+docker run -it ubuntu #to search for the Ubuntu image, type:
 docker search ubuntu
 
 #The pull command fetches the busybox image
@@ -1633,7 +1651,9 @@ sudo /etc/init.d/docker stop
 sudo /etc/init.d/docker start
 
 #run busybox bash
-docker run -it  busybox sh  --- output:
+docker run -it  busybox sh  
+
+--- output:
 bash-command:/ # ls -l
 bin   dev   etc   home  proc  root  sys   tmp   usr   var
 
@@ -2111,11 +2131,6 @@ SHIFT+F8
 Alt+SHIFT+F8
 
 
-REGEX
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-\b(?!,)\t\b = trova \t ma no ,\t : bisogna utilizzare Negative look ahead a(?!b) a ma non ab
-
-
 HTTPS/private key security
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 https://www.youtube.com/watch?v=Y-Oqh5ZEHXU
@@ -2153,3 +2168,120 @@ https://httpd.apache.org/docs/2.4/programs/ab.html
 https://installati.one/install-apache2-utils-ubuntu-20-04/
 
 ab -v
+
+POSTGRESSQL
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.postgresql.org/
+https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
+
+u:postgres
+p:password1
+
+#One way is to switch over to the postgres account on your server by running the following command
+sudo -i -u postgres
+
+#Then you can access the Postgres prompt by running:
+psql
+
+#Più conciso:
+sudo -u postgres psql
+
+
+#Step 3 — Creating a New Role:
+#dentro postgres:
+createuser --interactive
+
+#da fuori:
+sudo -u postgres createuser --interactive
+
+Enter name of role to add: sabaja
+
+#Step 4 — Creating a New Database
+createdb sabaja
+sudo -u postgres createdb sabaja
+
+#Step 5 — Opening a Postgres Prompt with the New Role
+sudo -u sabaja psql
+
+#If you want your user to connect to a different database, you can do so by specifying the database like the following:
+psql -d postgres
+
+#Once logged in, you can get check your current connection information by running:
+\conninfo
+
+------>You are connected to database "sabaja" as user "sabaja" via socket in "/var/run/postgresql" at port "5432".
+
+Installazione di PostgreSQL:
+
+Utilizza il tuo gestore di pacchetti per installare PostgreSQL. Su Ubuntu, puoi usare il seguente comando:
+
+sudo apt-get update
+sudo apt-get install postgresql
+Creazione di un utente e di un database:
+
+Una volta installato PostgreSQL, accedi al prompt di PostgreSQL con l'utente predefinito "postgres":
+
+sudo -u postgres psql
+Crea un utente e un database di esempio:
+
+CREATE USER nomeutente WITH PASSWORD 'password';
+CREATE DATABASE nomedatabase;
+ALTER DATABASE nomedatabase OWNER TO nomeutente;
+Sostituisci "nomeutente" e "password" con le tue scelte.
+
+Configurazione dell'accesso:
+
+PostgreSQL utilizza un file chiamato pg_hba.conf per configurare l'accesso al server. Puoi modificarlo per consentire la connessione da localhost.
+
+sudo nano /etc/postgresql/{version}/main/pg_hba.conf
+Aggiungi la seguente linea alla fine del file:
+
+
+host    nomedatabase    nomeutente    127.0.0.1/32    md5
+Salva il file e riavvia PostgreSQL:
+
+sudo service postgresql restart
+Accesso al database da un'applicazione o da un client:
+Ora che hai configurato il server, puoi connetterti al database da un'applicazione o da un client PostgreSQL. Quando ti connetti, usa i seguenti parametri:
+
+Hostname/Address: localhost o 127.0.0.1
+Port: Di default, PostgreSQL utilizza la porta 5432.
+Nome utente e password: Quelli che hai creato durante la fase di configurazione.
+Esempio di connessione con psql:
+psql -h localhost -U nomeutente -d nomedatabase
+Dove "nomeutente" e "nomedatabase" sono quelli che hai scelto durante la configurazione.
+
+Assicurati di cambiare la password predefinita dell'utente "postgres" e di proteggere il tuo database con credenziali robuste per garantire la sicurezza.
+
+
+API
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JSONPlaceholder: Un'API REST semplicissima che fornisce dati fittizi per operazioni CRUD (Create, Read, Update, Delete) su risorse come posts, comments, users, ecc. È perfetta per iniziare a familiarizzare con le chiamate API e le strutture JSON.
+
+Reqres.in: Simile a JSONPlaceholder, ma offre un set di dati leggermente più ampio e alcune funzionalità aggiuntive.
+
+Mocky.io: Ti permette di creare rapidamente mock API personalizzate con risposte statiche o dinamiche. È utile per simulare comportamenti specifici di un'API che stai sviluppando.
+
+GROUP COMMAND
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Per visualizzare il contenuto del file /etc/group, puoi usare il comando cat o less:
+$cat /etc/group
+
+***
+Elencare i gruppi con il comando getent:
+getent, abbreviazione di "get entries", è un comando Linux per visualizzare il contenuto dei file di informazioni di sistema, noti anche come database, su Linux. I file /etc/group, /etc/passwd e /etc/shadow sono buoni esempi di tali database.
+
+$getent group
+
+***
+Utilizzo del comando awk per le informazioni di gruppo:
+Qui -F specifica il separatore di campo e NF-3 calcola il numero di utenti nel gruppo.
+
+$getent group | awk -F: '{print $1, ":", NF-3, "users"}'
+
+***
+Combinazione di cut e awk per l'elenco di gruppo personalizzato:
+Combinando cute awkpuò fornire un elenco di gruppi personalizzato e succinto. Ad esempio:
+
+$getent group | cut -d: -f1,3 | awk '{print "Group:", $1, "GID:", $2}'
