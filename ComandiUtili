@@ -1731,6 +1731,11 @@ mkdir: created directory '/home/sabaja/.password-store/'
 Password store initialized for CF034E0FA88DEF9A670AFF840572386173EFA77E
 
 
+DOCKER-Postgres
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
+
+
 ZIPKIN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Per scaricare:
