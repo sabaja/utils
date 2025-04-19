@@ -1,0 +1,3 @@
+JSONPlaceholder: Un'API REST semplicissima che fornisce dati fittizi per operazioni CRUD (Create, Read, Update, Delete) su risorse come posts, comments, users, ecc. È perfetta per iniziare a familiarizzare con le chiamate API e le strutture JSON.
+Reqres.in: Simile a JSONPlaceholder, ma offre un set di dati leggermente più ampio e alcune funzionalità aggiuntive.
+Mocky.io: Ti permette di creare rapidamente mock API personalizzate con risposte statiche o dinamiche. È utile per simulare comportamenti specifici di un'API che stai sviluppando.

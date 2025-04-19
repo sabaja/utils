@@ -1609,6 +1609,9 @@ Common Commands:
 #Docker info
 docker info
 
+ci permette di veridicare lo stato del servizio docker
+service docker version
+
 may be sudo for Ubuntu
 #hello-world
 docker run hello-world
@@ -1704,6 +1707,29 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "$HOME":/home \
   jenkinsci/blueocean
+
+DOCKER DESKTOP
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Per connettersi e creare la password di docker-desktop, genera una chiave GPG. Puoi inizializzare pass utilizzando una chiave GPG. Per generare una chiave GPG, esegui:
+$ gpg --generate-key
+
+risposta:
+gpg: directory '/home/sabaja/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/home/sabaja/.gnupg/openpgp-revocs.d/CF034E0FA88DEF9A670AFF840572386173EFA77E.rev'
+public and secret key created and signed.
+
+pub   ed25519 2025-04-19 [SC] [expires: 2028-04-18]
+      CF034E0FA88DEF9A670AFF840572386173EFA77E
+uid                      Jacopo Sabatini <jacoposabatini76@gmail.com>
+sub   cv25519 2025-04-19 [E] [expires: 2028-04-18]
+
+Lanciare il comando pass init con la pub key (pass init <your_generated_gpg-id_public_key>)
+$ pass init CF034E0FA88DEF9A670AFF840572386173EFA77E
+
+risposta:
+mkdir: created directory '/home/sabaja/.password-store/'
+Password store initialized for CF034E0FA88DEF9A670AFF840572386173EFA77E
+
 
 ZIPKIN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2175,7 +2201,7 @@ https://www.postgresql.org/
 https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
 
 u:postgres
-p:password1
+p:postgres
 
 #One way is to switch over to the postgres account on your server by running the following command
 sudo -i -u postgres

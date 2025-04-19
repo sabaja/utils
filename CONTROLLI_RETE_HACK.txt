@@ -1,0 +1,58 @@
+1. Accedi al Router
+Accedi al pannello di controllo del router tramite il browser inserendo il suo indirizzo IP (di solito 192.168.1.1 o 192.168.0.1).
+
+2. Controlla i Dispositivi Connessi
+Puoi eseguire un comando per vedere i dispositivi connessi:
+
+$ sudo arp-scan --localnet
+
+3. Verifica DNS e Configurazioni di Rete
+Gli hacker possono modificare i server DNS del router per reindirizzare il traffico.
+Controlla le impostazioni DNS nel pannello del router. I DNS sospetti possono essere un segnale di hacking. Di default, il tuo ISP assegna il DNS.
+Puoi controllare i DNS attuali con:
+
+$ nmcli device show | grep IP4.DNS
+
+4. Utilizzo del comando ip per elencare le interfacce di rete in Linux:
+	questo comando visualizza un elenco di interfacce di rete insieme ai dettagli corrispondenti, 
+	come il nome dell'interfaccia, lo stato e l'indirizzo hardware. 
+	Il comando " ip " fornisce ampie capacità di configurazione e informazione di rete in Linux.
+
+$ ip addr 
+
+5. Utilizzo di nmcli per elencare le interfacce di rete in Linux:
+	Questo comando fornisce una panoramica delle interfacce di rete gestite da NetworkManager, i
+	nclusi dettagli quali tipo di dispositivo, stato, stato della connessione e indirizzi IP associati.
+	
+$ nmcli device status
+
+6. Utilizzo di netstat per elencare le interfacce di rete in Linux:
+	Questo comando visualizza una tabella delle interfacce di rete insieme alle rispettive statistiche di trasmissione e ricezione, come byte e pacchetti.
+	
+$ netstat -i
+
+7. Utilizzo del comando ifconfig per elencare le interfacce di rete in Linux:
+	Questo comando visualizza un output dettagliato che include informazioni su tutte le interfacce di rete attive, 
+	come il nome dell'interfaccia, l'indirizzo hardware, l'indirizzo IP e altri dettagli di configurazione.
+
+$ ifconfig
+
+8. Stampa del file /proc/net/dev per elencare le interfacce di rete in Linux:
+	Questo comando visualizza una tabella dettagliata delle interfacce di rete insieme a statistiche come byte e pacchetti ricevuti e trasmessi. 
+	Il file "/proc/net/dev" è un file virtuale che fornisce informazioni a livello kernel sui dispositivi di rete.
+
+$ cat /proc/net/dev
+
+9. Elenco della directory /sys/class/net/ per elencare le interfacce di rete in Linux:
+	uesto comando fornisce un semplice elenco di nomi di interfacce di rete presenti nella directory "/sys/class/net/". 
+	Ogni voce corrisponde a un'interfaccia di rete, come Ethernet o dispositivi wireless.
+
+$ ls /sys/class/net/
+
+10. Utilizzo del comando hwinfo per elencare le interfacce di rete in Linux:
+
+	https://www.geeksforgeeks.org/how-to-list-network-interfaces-in-linux/
+
+WIRESHARK (https://www.youtube.com/watch?v=WNarfORVwWE&ab_channel=IlSoftware.it):
+per le porte di tor filtro tcp.port == 9001 || tcp.port == 9030
+
