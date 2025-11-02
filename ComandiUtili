@@ -594,27 +594,27 @@ BASH Integer comparison
 -eq
 is equal to
 
-if [ "$a" -eq "$b" ]
+if [ "$a" -eq "$b" ]; then
 
 -ne
 is not equal to
 
-if [ "$a" -ne "$b" ]
+if [ "$a" -ne "$b" ]; then
 
 -gt
 is greater than
 
-if [ "$a" -gt "$b" ]
+if [ "$a" -gt "$b" ]; then
 
 -ge
 is greater than or equal to
 
-if [ "$a" -ge "$b" ]
+if [ "$a" -ge "$b" ]; then
 
 -lt
 is less than
 
-if [ "$a" -lt "$b" ]
+if [ "$a" -lt "$b" ]; then
 
 -le
 is less than or equal to
@@ -625,6 +625,52 @@ if [ "$a" -le "$b" ]
 is less than (within double parentheses)
 
 (("$a" < "$b"))
+
+BASH String comparison
+**********************************************************************************************************************************************************************************
+=: Equal to
+!=: Not equal to
+<: Less than, in ASCII alphabetical order
+>: Greater than, in ASCII alphabetical order
+
+if [ "a" := "a" ]; then 
+
+
+BASH If Statements
+**********************************************************************************************************************************************************************************
+# Basic if statement
+num=15
+if [ $num -gt 10 ]; then
+  echo "Number is greater than 10"
+fi
+
+
+# If...else statement
+num=8
+if [ $num -gt 10 ]; then
+  echo "Number is greater than 10"
+else
+  echo "Number is 10 or less"
+fi
+
+# Elif Statements
+num=10
+if [ $num -gt 10 ]; then
+  echo "Number is greater than 10"
+elif [ $num -eq 10 ]; then
+  echo "Number is exactly 10"
+else
+  echo "Number is less than 10"
+fi
+
+# Nested If Statement
+num=5
+if [ $num -gt 0 ]; then
+  if [ $num -lt 10 ]; then
+    echo "Number is between 1 and 9"
+  fi
+fi
+
 
 VI - LESS
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
