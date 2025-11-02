@@ -29,8 +29,6 @@ https://www.tutorialspoint.com/unix/unix-file-permission.htm					|
 --------------------------------------------------------------------------------
 
 #per vedere To list all local users you can use: 
-cut -d: -f1 /etc/passwd
-#oppure:
 cat /etc/passwd
 
 # Print selected parts of lines from each FILE to standard output.
@@ -591,6 +589,43 @@ true     Utility to do nothing, successfully
 umount   Utility to unmount file systems
 uname    Utility to print system information
 
+BASH Integer comparison
+**********************************************************************************************************************************************************************************
+-eq
+is equal to
+
+if [ "$a" -eq "$b" ]
+
+-ne
+is not equal to
+
+if [ "$a" -ne "$b" ]
+
+-gt
+is greater than
+
+if [ "$a" -gt "$b" ]
+
+-ge
+is greater than or equal to
+
+if [ "$a" -ge "$b" ]
+
+-lt
+is less than
+
+if [ "$a" -lt "$b" ]
+
+-le
+is less than or equal to
+
+if [ "$a" -le "$b" ]
+
+<
+is less than (within double parentheses)
+
+(("$a" < "$b"))
+
 VI - LESS
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                   SUMMARY OF LESS COMMANDS
@@ -906,8 +941,12 @@ hp-scan
 hp-scan -m color
 
 
-HP MAVEN
+MAVEN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Directory maven /opt:
+/opt/apache-maven-3.9.8
+/opt/apache-maven-3.9.9
+
 #Per pulire tramite eclipse
 mvn clean eclipse:clean 
 
@@ -939,6 +978,42 @@ mvn spring-boot:run --debug
 
 #per lanciare una applicazione spring boot
 mvnw spring-boot:run
+
+Aggiornare MAVEN (https://phoenixnap.com/kb/install-maven-on-ubuntu)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ultima versione (https://maven.apache.org/download.cgi): 
+https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+
+wget [link] -P /home/sabaja/Downloads
+wget https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz -P /home/sabaja/Downloads
+
+sudo tar xf /home/sabaja/Downloads/apache-maven-*.tar.gz -C /opt
+
+canecellare il vecchio puntamento (link) sotto la directory /opt/maven: 
+sudo rm /opt/maven
+
+Creare il puntamento (link):
+sudo ln -s /opt/apache-maven-3.9.9 /opt/maven
+
+*********SE LA PRIMA INSTALLAZIONE ALTRIMENTI SALTARE********************
+creare un profile di uno script maven:
+sudo nano /etc/profile.d/maven.sh
+
+incollare:
+export JAVA_HOME=/usr/lib/jvm/default-java
+export M2_HOME=/opt/maven
+export MAVEN_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+dare i permessi allo script
+sudo chmod +x /etc/profile.d/maven.sh
+********FINE PRIMA INSTALLAZIONE*****************************************
+
+aggiornare le variabili maven:
+source /etc/profile.d/maven.sh
+
+vedere la versione di maven:
+mvn -version     :: Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
 
 GIT
 git-token=WjLOpmslfyXf7KAmrwcPI/UOUUHTOiJkkkJCjjvzrhE
@@ -1848,6 +1923,10 @@ java -jar ./zipkin-server/target/zipkin-server-*exec.jar
 
 http://localhost:9411 
 
+per lanciare docker desktop:
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+systemctl --user restart docker-desktop
+
 
 RabbitMQ
 https://www.rabbitmq.com/install-debian.html
@@ -2316,3 +2395,26 @@ Combinazione di cut e awk per l'elenco di gruppo personalizzato:
 Combinando cute awkpuò fornire un elenco di gruppi personalizzato e succinto. Ad esempio:
 
 $getent group | cut -d: -f1,3 | awk '{print "Group:", $1, "GID:", $2}'
+
+/etc/profile.d
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+La directory /etc/profile.d in Linux serve per ospitare script che vengono eseguiti dal file /etc/profile durante l'avvio della shell. 
+In pratica, è un luogo dove i system administrator possono aggiungere le loro configurazioni specifiche senza modificare il file /etc/profile direttamente. 
+Spiegazione dettagliata:
+/etc/profile
+
+Questo file viene letto da tutti gli utenti quando si avvia la shell. 
+Contiene configurazioni globali che riguardano il sistema, come l'impostazione di variabili d'ambiente, la definizione di alias e altre impostazioni di base.
+
+/etc/profile.d:
+Questa directory contiene script (solitamente file di shell) che verranno eseguiti dopo il file /etc/profile. 
+Questo permette di organizzare la configurazione in moduli più piccoli e gestibili. 
+Funzione:
+Gli script in /etc/profile.d vengono eseguiti in ordine. 
+Questo significa che si possono aggiungere configurazioni specifiche per un ambiente di sviluppo, un servizio o qualsiasi altra esigenza senza modificare direttamente il file /etc/profile. 
+Vantaggi:
+Modularità: La configurazione viene divisa in script separati, rendendola più facile da gestire e da aggiornare.
+
+Personalizzazione: Gli amministratori possono facilmente aggiungere script specifici per i loro requisiti.
+
+Riduci le modifiche a /etc/profile: Questo facilita l'aggiornamento del sistema, in quanto le modifiche personalizzate vengono mantenute separate dai cambiamenti generati dall'aggiornamento del sistema stesso. 
