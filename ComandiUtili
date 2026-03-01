@@ -1741,6 +1741,8 @@ docker run hello-world
 docker run -it ubuntu 
 #run ubuntu bash
 docker run -it ubuntu #to search for the Ubuntu image, type:
+
+#per cercare un immagine
 docker search ubuntu
 
 #The pull command fetches the busybox image
@@ -1754,6 +1756,16 @@ docker run busybox printf "%s\n" echo -e "\xaa"
 
 #to see a list of all images on your system.
 docker images
+docker image ls
+
+#per vedere in docker compose
+docker history nome nginx "dell'image o id dell'imaggine"
+
+#interroga il manifest per vedere tutte le architetture supportate
+docker manifest inspect node <- nome dell'imagine
+
+#stesso sopra per vedere più info con flag verbose
+docker manifest inspect --verbose node
 
 #The docker ps command shows you all containers that are currently running.
 docker ps
