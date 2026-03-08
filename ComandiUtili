@@ -1737,8 +1737,16 @@ may be sudo for Ubuntu
 #hello-world
 docker run hello-world
 
-#To try something more ambitious, you can run an Ubuntu container with:
+#Eseguire una bash con Docker e Ubuntu:
 docker run -it ubuntu 
+
+#per Uscire dalla bash:
+exit 			-> esce e muore il container
+ctrl + d 		-> come sopra
+ctrl + p | ctrl + q	-> esce dal terminale di ubuntu ma non muore il container. ID -> root@8fe079daa195 
+#Di conseguenza per ritornare eseguire il comando:
+docker attach 'ID' cioè '8fe079daa195'
+
 #run ubuntu bash
 docker run -it ubuntu #to search for the Ubuntu image, type:
 
@@ -1754,12 +1762,16 @@ docker run -it --rm busybox
 #examples:
 docker run busybox printf "%s\n" echo -e "\xaa"
 
-#to see a list of all images on your system.
+#per vedere tutte le immagini docker.
 docker images
 docker image ls
 
+#per rimuovere/eliminare un'immagine
+docker image -rm <nome>
+docker rmi <nome>
+
 #per vedere in docker compose
-docker history nome nginx "dell'image o id dell'imaggine"
+docker history "nome dell'image o id dell'imaggine" eg: nginx
 
 #interroga il manifest per vedere tutte le architetture supportate
 docker manifest inspect node <- nome dell'imagine
@@ -2420,6 +2432,64 @@ psql -h localhost -U nomeutente -d nomedatabase
 Dove "nomeutente" e "nomedatabase" sono quelli che hai scelto durante la configurazione.
 
 Assicurati di cambiare la password predefinita dell'utente "postgres" e di proteggere il tuo database con credenziali robuste per garantire la sicurezza.
+
+CLI 
+Informational
+  (options: S = show system objects, x = expanded mode, + = additional detail)
+  \d[Sx+]                list tables, views, and sequences
+  \d[S+]   NAME          describe table, view, sequence, or index
+  \da[Sx]  [PATTERN]     list aggregates
+  \dA[x+]  [PATTERN]     list access methods
+  \dAc[x+] [AMPTRN [TYPEPTRN]]  list operator classes
+  \dAf[x+] [AMPTRN [TYPEPTRN]]  list operator families
+  \dAo[x+] [AMPTRN [OPFPTRN]]   list operators of operator families
+  \dAp[x+] [AMPTRN [OPFPTRN]]   list support functions of operator families
+  \db[x+]  [PATTERN]     list tablespaces
+  \dc[Sx+] [PATTERN]     list conversions
+  \dconfig[x+] [PATTERN] list configuration parameters
+  \dC[x+]  [PATTERN]     list casts
+  \dd[Sx]  [PATTERN]     show object descriptions not displayed elsewhere
+  \dD[Sx+] [PATTERN]     list domains
+  \ddp[x]  [PATTERN]     list default privileges
+  \dE[Sx+] [PATTERN]     list foreign tables
+  \des[x+] [PATTERN]     list foreign servers
+  \det[x+] [PATTERN]     list foreign tables
+  \deu[x+] [PATTERN]     list user mappings
+  \dew[x+] [PATTERN]     list foreign-data wrappers
+  \df[anptw][Sx+] [FUNCPTRN [TYPEPTRN ...]]
+                         list [only agg/normal/procedure/trigger/window] functions
+  \dF[x+]  [PATTERN]     list text search configurations
+  \dFd[x+] [PATTERN]     list text search dictionaries
+  \dFp[x+] [PATTERN]     list text search parsers
+  \dFt[x+] [PATTERN]     list text search templates
+  \dg[Sx+] [PATTERN]     list roles
+  \di[Sx+] [PATTERN]     list indexes
+  \dl[x+]                list large objects, same as \lo_list
+  \dL[Sx+] [PATTERN]     list procedural languages
+  \dm[Sx+] [PATTERN]     list materialized views
+  \dn[Sx+] [PATTERN]     list schemas
+  \do[Sx+] [OPPTRN [TYPEPTRN [TYPEPTRN]]]
+                         list operators
+  \dO[Sx+] [PATTERN]     list collations
+  \dp[Sx]  [PATTERN]     list table, view, and sequence access privileges
+  \dP[itnx+] [PATTERN]   list [only index/table] partitioned relations [n=nested]
+  \drds[x] [ROLEPTRN [DBPTRN]]
+                         list per-database role settings
+  \drg[Sx] [PATTERN]     list role grants
+  \dRp[x+] [PATTERN]     list replication publications
+  \dRs[x+] [PATTERN]     list replication subscriptions
+  \ds[Sx+] [PATTERN]     list sequences
+  \dt[Sx+] [PATTERN]     list tables
+  \dT[Sx+] [PATTERN]     list data types
+  \du[Sx+] [PATTERN]     list roles
+  \dv[Sx+] [PATTERN]     list views
+  \dx[x+]  [PATTERN]     list extensions
+  \dX[x]   [PATTERN]     list extended statistics
+  \dy[x+]  [PATTERN]     list event triggers
+  \l[x+]   [PATTERN]     list databases
+  \sf[+]   FUNCNAME      show a function's definition
+  \sv[+]   VIEWNAME      show a view's definition
+  \z[Sx]   [PATTERN]     same as \dp
 
 
 API
