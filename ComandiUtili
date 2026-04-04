@@ -451,7 +451,7 @@ find . -type f -name '*' -exec sed --in-place 's/[[:space:]]\+$//' {} \+
 #Rimuovere le vecchie segnalazioni di errore
 #https://andrealazzarotto.com/2014/01/19/rimuovere-le-vecchie-segnalazioni-di-errore-da-ubuntu/ 
 #per listare
-ls /var/crash/
+
 #per rimuovere
 sudo rm /var/crash/*
 
@@ -1730,7 +1730,7 @@ Common Commands:
 #Docker info
 docker info
 
-ci permette di veridicare lo stato del servizio docker
+#ci permette di veridicare lo stato del servizio docker
 service docker version
 
 may be sudo for Ubuntu
@@ -1747,7 +1747,7 @@ ctrl + p | ctrl + q	-> esce dal terminale di ubuntu ma non muore il container. I
 #Di conseguenza per ritornare eseguire il comando:
 docker attach 'ID' cioè '8fe079daa195'
 
-#run ubuntu bash
+#run ubuntu con bash
 docker run -it ubuntu #to search for the Ubuntu image, type:
 
 #per cercare un immagine
@@ -1756,7 +1756,7 @@ docker search ubuntu
 #The pull command fetches the busybox image
 docker pull busybox
 
-#Run BusyBox shell
+#Run BusyBox shell e poi rimuverlo quando si esce con il flag --rm
 docker run -it --rm busybox
 
 #examples:
@@ -1769,6 +1769,9 @@ docker image ls
 #per rimuovere/eliminare un'immagine
 docker image -rm <nome>
 docker rmi <nome>
+
+#per rimuovere/eliminare tutte le immagini in esecuzione (-q ritorna solo gli id)
+docker rm -f $(docker ps -q)
 
 #per vedere in docker compose
 docker history "nome dell'image o id dell'imaggine" eg: nginx
@@ -1788,7 +1791,7 @@ docker ps -a
 #To view the latest container you created, pass it the -l switch:
 docker ps -l
 
-#Stopping a running or active container is as simple as typing:
+#Fermare un container attivo:
 docker stop container-id
 #The container-id can be found in the output from the docker ps command.
 
