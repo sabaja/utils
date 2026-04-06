@@ -1747,7 +1747,7 @@ ctrl + p | ctrl + q	-> esce dal terminale di ubuntu ma non muore il container. I
 #Di conseguenza per ritornare eseguire il comando:
 docker attach 'ID' cioè '8fe079daa195'
 
-#run ubuntu con bash
+#per eseguire un container run ubuntu con bash
 docker run -it ubuntu #to search for the Ubuntu image, type:
 
 #per cercare un immagine
@@ -1770,8 +1770,23 @@ docker image ls
 docker image -rm <nome>
 docker rmi <nome>
 
-#per rimuovere/eliminare tutte le immagini in esecuzione (-q ritorna solo gli id)
-docker rm -f $(docker ps -q)
+#per elencare tutti i container in esecuzione
+docker ps
+
+#per elencare tutti i container eseguiti  (per elencarli all)
+docker ps -a
+ 
+#Tutti i container si possono riavviare con start (per elencare tutti quelli lanciati usare docker ps -a):
+docker start id-immagine | docker strat ubuntu
+
+#per lanciare un immagine detached, che stacca dal terminale usare il flag -d (detached):
+docker run -d --name conta --rm ubuntu bash -c "for c in {1..100}; do sleep 1; date +%T; done"
+
+#per vedere il log di un immagine in esecuzione:
+docker logs "nome o id del container" -> docker logs conta |  docker logs cf029071c93635f90c1805d0b26ee31f058848a12d92cff6cc7dcc14bcb34fb2
+
+#per vedere il log di un immagine in esecuzione e seguire il log usare il flag -f (follow):
+docker logs conta -f
 
 #per vedere in docker compose
 docker history "nome dell'image o id dell'imaggine" eg: nginx
@@ -1796,43 +1811,27 @@ docker stop container-id
 #The container-id can be found in the output from the docker ps command.
 
 Se non si ferma:
-#After a VM restart, I ran lsmod | grep overlay again to confirm overlay kernel module is loaded. After seeing it there, I added --storage-driver=overlay flag to the #DOCKER_OPTS line inside my docker config file (/etc/default/docker) and ran the below commands to restart docker:
+docker kill container-id o nome
 
-sudo /etc/init.d/docker stop
-sudo /etc/init.d/docker start
+#per lanciare una bash
+docker run -it busybox sh  
+--
+	bash-command:/ # ls -l
+	bin   dev   etc   home  proc  root  sys   tmp   usr   var
 
-#run busybox bash
-docker run -it  busybox sh  
+	bash-command:/ # uptime
+	14:39:30 up 17:20,  0 users,  load average: 0.01, 0.04, 0.03
+--
 
---- output:
-bash-command:/ # ls -l
-bin   dev   etc   home  proc  root  sys   tmp   usr   var
-
-bash-command:/ # uptime
-14:39:30 up 17:20,  0 users,  load average: 0.01, 0.04, 0.03
-
-Danger Zone: If you're feeling particularly adventurous you can try rm -rf bin in the container.
-Make sure you run this command in the container and not in your laptop/desktop.
-Doing this will not make any other commands like ls, echo work.
-Once everything stops working, you can exit the container (type exit and press Enter)
-and then start it up again with the docker run -it busybox sh command.
-Since Docker creates a new container every time, everything should start working again.
-
-#use docker run --help
+#usare HELP in docker run --help
 docker run --help
 
-#Dopo usati i contenitori bisogna eliminarli:
-docker ps -a (per elencarli)
- 
-#per eliminarli uno a uno:
-docker rm b654588613df e744045b1a00 e744045b1a00
+#!!!!!!!! PRODUZIONE !!!!!!!! Per lanciare un immagine che non saturi le risorse del server si può utilizzare il comando --cpus
+# con cpus limitiamo il numero di cpu che il container deve usare senza quindi saturare la macchina che esegue 
+docker run --cpus 4 -rm jojje/cloud-cpu-bench
 
-#per eliminarli tutti insieme:
-docker rm $(docker ps -a -q -f status=exited)
-
-#sulle ultime versioni di doker:
-docker container prune
-
+#!!!!!!!! PRODUZIONE !!!!!!!! Per limitare la memoria a determinate quantità esempio un 1 G, si può usare l'opzione --memory così che non si "rubi" la memoria del server: 
+docker run --memory 1024m --rm -it ubuntu bash -c "head -c 4096m /dev/zero | tail | sleep 10"
 
 #To save the state of the container as a new image, first exit from it:
 exit
