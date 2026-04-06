@@ -1756,28 +1756,11 @@ docker search ubuntu
 #The pull command fetches the busybox image
 docker pull busybox
 
-#Run BusyBox shell e poi rimuverlo quando si esce con il flag --rm
+#Per lanciare BusyBox shell e poi rimuverlo quando si esce con il flag --rm
 docker run -it --rm busybox
 
 #examples:
 docker run busybox printf "%s\n" echo -e "\xaa"
-
-#per vedere tutte le immagini docker.
-docker images
-docker image ls
-
-#per rimuovere/eliminare un'immagine
-docker image -rm <nome>
-docker rmi <nome>
-
-#per elencare tutti i container in esecuzione
-docker ps
-
-#per elencare tutti i container eseguiti  (per elencarli all)
-docker ps -a
- 
-#Tutti i container si possono riavviare con start (per elencare tutti quelli lanciati usare docker ps -a):
-docker start id-immagine | docker strat ubuntu
 
 #per lanciare un immagine detached, che stacca dal terminale usare il flag -d (detached):
 docker run -d --name conta --rm ubuntu bash -c "for c in {1..100}; do sleep 1; date +%T; done"
@@ -1787,6 +1770,38 @@ docker logs "nome o id del container" -> docker logs conta |  docker logs cf0290
 
 #per vedere il log di un immagine in esecuzione e seguire il log usare il flag -f (follow):
 docker logs conta -f
+
+#per vedere tutte le immagini docker.
+docker images
+docker image ls
+
+#per elencare tutti i container in esecuzione
+docker ps
+
+#per elencare tutti i container eseguiti  (per elencarli all)
+docker ps -a
+ 
+#per elencare tutti i container in uno stato particolare es: exited
+docker ps -f status=exited
+ 
+#per elencare tutti i container eseguiti e farsi dare solo l'id -q
+docker ps -a -q
+
+#Tutti i container si possono riavviare con start (per elencare tutti quelli lanciati usare docker ps -a):
+docker start id-immagine | docker strat ubuntu
+
+#per rimuovere/eliminare un'immagine
+docker image -rm <nome>
+docker rmi <nome>
+
+#per eliminarli uno a uno:
+docker rm b654588613df e744045b1a00 e744045b1a00
+
+#per eliminarli tutti insieme:
+docker rm $(docker ps -a -q -f status=exited)
+
+#sulle ultime versioni di doker:
+docker container prune
 
 #per vedere in docker compose
 docker history "nome dell'image o id dell'imaggine" eg: nginx
