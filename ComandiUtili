@@ -1263,6 +1263,14 @@ GIT SSH
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ssh-keygen -t rsa -b 4096 -C "jacoposabatini76@gmail.com"
 
+GIT WORKTREE
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Per lavorare sullo stesso repository con 2 branch separati usare il comando worktree, creererà una cartella nuova con il codice del branch.
+#Usare git worktree add specificando una cartella con nome inventato (per comodità nella directory padre) e specificare il branch:
+git worktree add ../nome-cartella nome-branch
+
+#Per rimuovere la cartella usare il comando worktree remove nome-cartella precedentemente creata  
+git worktree remove ../nome-cartella
 
 SVN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1725,8 +1733,6 @@ Common Commands:
   info        Display system-wide information
 ***
 
-
-
 #Docker info
 docker info
 
@@ -1791,16 +1797,16 @@ docker ps -a -q
 docker start id-immagine | docker strat ubuntu
 
 #per rimuovere/eliminare un'immagine
-docker image -rm <nome>
+docker image rm <nome>
 docker rmi <nome>
 
 #per eliminarli uno a uno:
 docker rm b654588613df e744045b1a00 e744045b1a00
 
-#per eliminarli tutti insieme:
+#per eliminarli tutti insieme in uno stato particolare:
 docker rm $(docker ps -a -q -f status=exited)
 
-#sulle ultime versioni di doker:
+#Per eliminarli indistinamente:
 docker container prune
 
 #per vedere in docker compose
@@ -1848,6 +1854,16 @@ docker run --cpus 4 -rm jojje/cloud-cpu-bench
 #!!!!!!!! PRODUZIONE !!!!!!!! Per limitare la memoria a determinate quantità esempio un 1 G, si può usare l'opzione --memory così che non si "rubi" la memoria del server: 
 docker run --memory 1024m --rm -it ubuntu bash -c "head -c 4096m /dev/zero | tail | sleep 10"
 
+#per aprire una porta del prioprio host sul container usare flag -p (port) 8080:80 -> host-port:cointaner-port 
+docker run --rm -p 8080:80 nginx
+
+#per caricare index.html su webserver nginx in docker usare flaf -v  / percorso locale:percorso su nginx
+#percorso /usr/share/nginx/html è dove vengono caricate le pagine index.html
+#il file nel l deve essere per forza un index.html 
+docker run --rm -p 8080:80 -v /home/sabaja/Documents/:/usr/share/nginx/html/ nginx:latest
+
+DOCKER NEL REPOSITORY
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #To save the state of the container as a new image, first exit from it:
 exit
 #commit:
