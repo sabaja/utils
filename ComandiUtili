@@ -1658,261 +1658,6 @@ for(var i=1; i<=20000; i++)
 	); 
 }
 
-DOCKER
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04 
-https://docker-curriculum.com/
-
-#Installare con il repository
-https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
-
-#Docker repo instead of the default Ubuntu 16.04 repo
-apt-cache policy docker-cesudo service docker start
-
-#Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it's running:
-sudo systemctl status docker
-
-#Per aggiungere sabaja al docker group (non si deve digitare più sudo)
-sudo usermod -aG docker sabaja
-sudo usermod -aG docker $USER
-su - sabaja
-id -nG
-
-#https://docs.docker.com/v17.09/engine/installation/linux/linux-postinstall/#configure-docker-to-start-on-boot
-#Abilitare allo startup
-sudo systemctl enable docker
-
-#disabilitare lo startup
-sudo systemctl disable docker
-
-#Per far partire il daemon di docker:
-#After the installation finishes, Docker usually starts up on its own, but for the next part to work you will need to stop it.
-
-sudo service docker stop
-#Then run the daemon with the following command:
-sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
-
-#install a specifi CE of Docker
-18.06.3~ce~3-0~ubuntu 
-sudo apt install docker-ce=18.06.3~ce~3-0~ubuntu docker-ce-cli=18.06.3~ce~3-0~ubuntu containerd.io
-
-#########################PER FAR PARTIRE DOCKER##########################################
-sudo service docker start
-
-#########################PER DISINSTALLARE DOCKER########################################
-## https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker ############
-#Step 1
-dpkg -l | grep -i docker
-sudo apt purge -y docker-engine docker docker.io docker-ce docker-ce-cli
-sudo apt autoremove -y --purge docker-engine docker docker.io docker-ce docker-ce-cli
-sudo rm -rf /var/lib/docker
-sudo rm /etc/apparmor.d/docker
-sudo groupdel docker
-sudo rm -rf /var/run/docker.sock
-sudo rm -rf /etc/systemd/system/docker.service
-sudo rm -rf /etc/docker
-sudo rm -rf /run/docker
-sudo rm -rf /run/snapd/lock/docker.lock
-
-
-sudo apt-get remove docker docker-engine docker.io containerd runc
-
-****
-Common Commands:
-  run         Create and run a new container from an image
-  exec        Execute a command in a running container
-  ps          List containers
-  build       Build an image from a Dockerfile
-  pull        Download an image from a registry
-  push        Upload an image to a registry
-  images      List images
-  login       Authenticate to a registry
-  logout      Log out from a registry
-  search      Search Docker Hub for images
-  version     Show the Docker version information
-  info        Display system-wide information
-***
-
-#Docker info
-docker info
-
-#ci permette di veridicare lo stato del servizio docker
-service docker version
-
-may be sudo for Ubuntu
-#hello-world
-docker run hello-world
-
-#Eseguire una bash con Docker e Ubuntu:
-docker run -it ubuntu 
-
-#per Uscire dalla bash:
-exit 			-> esce e muore il container
-ctrl + d 		-> come sopra
-ctrl + p | ctrl + q	-> esce dal terminale di ubuntu ma non muore il container. ID -> root@8fe079daa195 
-#Di conseguenza per ritornare eseguire il comando:
-docker attach 'ID' cioè '8fe079daa195'
-
-#per eseguire un container run ubuntu con bash
-docker run -it ubuntu #to search for the Ubuntu image, type:
-
-#per cercare un immagine
-docker search ubuntu
-
-#The pull command fetches the busybox image
-docker pull busybox
-
-#Per lanciare BusyBox shell e poi rimuverlo quando si esce con il flag --rm
-docker run -it --rm busybox
-
-#examples:
-docker run busybox printf "%s\n" echo -e "\xaa"
-
-#per lanciare un immagine detached, che stacca dal terminale usare il flag -d (detached):
-docker run -d --name conta --rm ubuntu bash -c "for c in {1..100}; do sleep 1; date +%T; done"
-
-#per vedere il log di un immagine in esecuzione:
-docker logs "nome o id del container" -> docker logs conta |  docker logs cf029071c93635f90c1805d0b26ee31f058848a12d92cff6cc7dcc14bcb34fb2
-
-#per vedere il log di un immagine in esecuzione e seguire il log usare il flag -f (follow):
-docker logs conta -f
-
-#per vedere tutte le immagini docker.
-docker images
-docker image ls
-
-#per elencare tutti i container in esecuzione
-docker ps
-
-#per elencare tutti i container eseguiti  (per elencarli all)
-docker ps -a
- 
-#per elencare tutti i container in uno stato particolare es: exited
-docker ps -f status=exited
- 
-#per elencare tutti i container eseguiti e farsi dare solo l'id -q
-docker ps -a -q
-
-#Tutti i container si possono riavviare con start (per elencare tutti quelli lanciati usare docker ps -a):
-docker start id-immagine | docker strat ubuntu
-
-#per rimuovere/eliminare un'immagine
-docker image rm <nome>
-docker rmi <nome>
-
-#per eliminarli uno a uno:
-docker rm b654588613df e744045b1a00 e744045b1a00
-
-#per eliminarli tutti insieme in uno stato particolare:
-docker rm $(docker ps -a -q -f status=exited)
-
-#Per eliminarli indistinamente:
-docker container prune
-
-#per vedere in docker compose
-docker history "nome dell'image o id dell'imaggine" eg: nginx
-
-#interroga il manifest per vedere tutte le architetture supportate
-docker manifest inspect node <- nome dell'imagine
-
-#stesso sopra per vedere più info con flag verbose
-docker manifest inspect --verbose node
-
-#The docker ps command shows you all containers that are currently running.
-docker ps
-
-#list of all containers  containers — active and inactive that we ran.
-docker ps -a
- 
-#To view the latest container you created, pass it the -l switch:
-docker ps -l
-
-#Fermare un container attivo:
-docker stop container-id
-#The container-id can be found in the output from the docker ps command.
-
-Se non si ferma:
-docker kill container-id o nome
-
-#per lanciare una bash
-docker run -it busybox sh  
---
-	bash-command:/ # ls -l
-	bin   dev   etc   home  proc  root  sys   tmp   usr   var
-
-	bash-command:/ # uptime
-	14:39:30 up 17:20,  0 users,  load average: 0.01, 0.04, 0.03
---
-
-#usare HELP in docker run --help
-docker run --help
-
-#!!!!!!!! PRODUZIONE !!!!!!!! Per lanciare un immagine che non saturi le risorse del server si può utilizzare il comando --cpus
-# con cpus limitiamo il numero di cpu che il container deve usare senza quindi saturare la macchina che esegue 
-docker run --cpus 4 -rm jojje/cloud-cpu-bench
-
-#!!!!!!!! PRODUZIONE !!!!!!!! Per limitare la memoria a determinate quantità esempio un 1 G, si può usare l'opzione --memory così che non si "rubi" la memoria del server: 
-docker run --memory 1024m --rm -it ubuntu bash -c "head -c 4096m /dev/zero | tail | sleep 10"
-
-#per aprire una porta del prioprio host sul container usare flag -p (port) 8080:80 -> host-port:cointaner-port 
-docker run --rm -p 8080:80 nginx
-
-#per caricare index.html su webserver nginx in docker usare flaf -v  / percorso locale:percorso su nginx
-#percorso /usr/share/nginx/html è dove vengono caricate le pagine index.html
-#il file nel l deve essere per forza un index.html 
-docker run --rm -p 8080:80 -v /home/sabaja/Documents/:/usr/share/nginx/html/ nginx:latest
-
-DOCKER NEL REPOSITORY
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#To save the state of the container as a new image, first exit from it:
-exit
-#commit:
-docker commit -m "What did you do to the image" -a "Author Name" container-id repository/new_image_name
-example:
-docker commit -m "added node.js" -a "Thuesday Jacopo" a63128d2dff8 repo/ubuntu-nodejs
-response:
-sha256:ab035e7afa47738710ccfd5ce8ad8a361e7279b604444b98dcd29ff7a2e88a4b
-
-DA CONTINUARE continue:
-Step 8 — Pushing Docker Images to a Docker Repository
-
-Per lanciare jenkins/blueoceans
-docker run \
-  --rm \
-  -u root \
-  -p 8080:8080 \
-  -v jenkins-data:/var/jenkins_home \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v "$HOME":/home \
-  jenkinsci/blueocean
-
-DOCKER DESKTOP
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Per connettersi e creare la password di docker-desktop, genera una chiave GPG. Puoi inizializzare pass utilizzando una chiave GPG. Per generare una chiave GPG, esegui:
-$ gpg --generate-key
-
-risposta:
-gpg: directory '/home/sabaja/.gnupg/openpgp-revocs.d' created
-gpg: revocation certificate stored as '/home/sabaja/.gnupg/openpgp-revocs.d/CF034E0FA88DEF9A670AFF840572386173EFA77E.rev'
-public and secret key created and signed.
-
-pub   ed25519 2025-04-19 [SC] [expires: 2028-04-18]
-      CF034E0FA88DEF9A670AFF840572386173EFA77E
-uid                      Jacopo Sabatini <jacoposabatini76@gmail.com>
-sub   cv25519 2025-04-19 [E] [expires: 2028-04-18]
-
-Lanciare il comando pass init con la pub key (pass init <your_generated_gpg-id_public_key>)
-$ pass init CF034E0FA88DEF9A670AFF840572386173EFA77E
-
-risposta:
-mkdir: created directory '/home/sabaja/.password-store/'
-Password store initialized for CF034E0FA88DEF9A670AFF840572386173EFA77E
-
-
-DOCKER-Postgres
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
-
 
 ZIPKIN
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2579,3 +2324,258 @@ Modularità: La configurazione viene divisa in script separati, rendendola più 
 Personalizzazione: Gli amministratori possono facilmente aggiungere script specifici per i loro requisiti.
 
 Riduci le modifiche a /etc/profile: Questo facilita l'aggiornamento del sistema, in quanto le modifiche personalizzate vengono mantenute separate dai cambiamenti generati dall'aggiornamento del sistema stesso. 
+
+DOCKER
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04 
+https://docker-curriculum.com/
+
+#Installare con il repository
+https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
+
+#Docker repo instead of the default Ubuntu 16.04 repo
+apt-cache policy docker-cesudo service docker start
+
+#Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it's running:
+sudo systemctl status docker
+
+#Per aggiungere sabaja al docker group (non si deve digitare più sudo)
+sudo usermod -aG docker sabaja
+sudo usermod -aG docker $USER
+su - sabaja
+id -nG
+
+#https://docs.docker.com/v17.09/engine/installation/linux/linux-postinstall/#configure-docker-to-start-on-boot
+#Abilitare allo startup
+sudo systemctl enable docker
+
+#disabilitare lo startup
+sudo systemctl disable docker
+
+#Per far partire il daemon di docker:
+#After the installation finishes, Docker usually starts up on its own, but for the next part to work you will need to stop it.
+
+sudo service docker stop
+#Then run the daemon with the following command:
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+
+#install a specifi CE of Docker
+18.06.3~ce~3-0~ubuntu 
+sudo apt install docker-ce=18.06.3~ce~3-0~ubuntu docker-ce-cli=18.06.3~ce~3-0~ubuntu containerd.io
+
+#########################PER FAR PARTIRE DOCKER##########################################
+sudo service docker start
+
+#########################PER DISINSTALLARE DOCKER########################################
+## https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker ############
+#Step 1
+dpkg -l | grep -i docker
+sudo apt purge -y docker-engine docker docker.io docker-ce docker-ce-cli
+sudo apt autoremove -y --purge docker-engine docker docker.io docker-ce docker-ce-cli
+sudo rm -rf /var/lib/docker
+sudo rm /etc/apparmor.d/docker
+sudo groupdel docker
+sudo rm -rf /var/run/docker.sock
+sudo rm -rf /etc/systemd/system/docker.service
+sudo rm -rf /etc/docker
+sudo rm -rf /run/docker
+sudo rm -rf /run/snapd/lock/docker.lock
+
+
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+****
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Authenticate to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+***
+
+#Docker info
+docker info
+
+#ci permette di veridicare lo stato del servizio docker
+service docker version
+
+may be sudo for Ubuntu
+#hello-world
+docker run hello-world
+
+#Eseguire una bash con Docker e Ubuntu:
+docker run -it ubuntu 
+
+#per Uscire dalla bash:
+exit 			-> esce e muore il container
+ctrl + d 		-> come sopra
+ctrl + p | ctrl + q	-> esce dal terminale di ubuntu ma non muore il container. ID -> root@8fe079daa195 
+#Di conseguenza per ritornare eseguire il comando:
+docker attach 'ID' cioè '8fe079daa195'
+
+#per eseguire un container run ubuntu con bash
+docker run -it ubuntu #to search for the Ubuntu image, type:
+
+#per cercare un immagine
+docker search ubuntu
+
+#The pull command fetches the busybox image
+docker pull busybox
+
+#Per lanciare BusyBox shell e poi rimuverlo quando si esce con il flag --rm
+docker run -it --rm busybox
+
+#examples:
+docker run busybox printf "%s\n" echo -e "\xaa"
+
+#per lanciare un immagine detached, che stacca dal terminale usare il flag -d (detached):
+docker run -d --name conta --rm ubuntu bash -c "for c in {1..100}; do sleep 1; date +%T; done"
+
+#per vedere il log di un immagine in esecuzione:
+docker logs "nome o id del container" -> docker logs conta |  docker logs cf029071c93635f90c1805d0b26ee31f058848a12d92cff6cc7dcc14bcb34fb2
+
+#per vedere il log di un immagine in esecuzione e seguire il log usare il flag -f (follow):
+docker logs conta -f
+
+#per vedere tutte le immagini docker.
+docker images
+docker image ls
+
+#per elencare tutti i container in esecuzione
+docker ps
+
+#per elencare tutti i container eseguiti  (per elencarli all)
+docker ps -a
+ 
+#per elencare tutti i container in uno stato particolare es: exited
+docker ps -f status=exited
+ 
+#per elencare tutti i container eseguiti e farsi dare solo l'id -q
+docker ps -a -q
+
+#Tutti i container si possono riavviare con start (per elencare tutti quelli lanciati usare docker ps -a):
+docker start id-immagine | docker strat ubuntu
+
+#per rimuovere/eliminare un'immagine
+docker image rm <nome>
+docker rmi <nome>
+
+#per eliminarli uno a uno:
+docker rm b654588613df e744045b1a00 e744045b1a00
+
+#per eliminarli tutti insieme in uno stato particolare:
+docker rm $(docker ps -a -q -f status=exited)
+
+#Per eliminarli indistinamente:
+docker container prune
+
+#per vedere in docker compose
+docker history "nome dell'image o id dell'imaggine" eg: nginx
+
+#interroga il manifest per vedere tutte le architetture supportate
+docker manifest inspect node <- nome dell'imagine
+
+#stesso sopra per vedere più info con flag verbose
+docker manifest inspect --verbose node
+
+#The docker ps command shows you all containers that are currently running.
+docker ps
+
+#list of all containers  containers — active and inactive that we ran.
+docker ps -a
+ 
+#To view the latest container you created, pass it the -l switch:
+docker ps -l
+
+#Fermare un container attivo:
+docker stop container-id
+#The container-id can be found in the output from the docker ps command.
+
+Se non si ferma:
+docker kill container-id o nome
+
+#per lanciare una bash
+docker run -it busybox sh  
+--
+	bash-command:/ # ls -l
+	bin   dev   etc   home  proc  root  sys   tmp   usr   var
+
+	bash-command:/ # uptime
+	14:39:30 up 17:20,  0 users,  load average: 0.01, 0.04, 0.03
+--
+
+#usare HELP in docker run --help
+docker run --help
+
+#!!!!!!!! PRODUZIONE !!!!!!!! Per lanciare un immagine che non saturi le risorse del server si può utilizzare il comando --cpus
+# con cpus limitiamo il numero di cpu che il container deve usare senza quindi saturare la macchina che esegue 
+docker run --cpus 4 -rm jojje/cloud-cpu-bench
+
+#!!!!!!!! PRODUZIONE !!!!!!!! Per limitare la memoria a determinate quantità esempio un 1 G, si può usare l'opzione --memory così che non si "rubi" la memoria del server: 
+docker run --memory 1024m --rm -it ubuntu bash -c "head -c 4096m /dev/zero | tail | sleep 10"
+
+#per aprire una porta del prioprio host sul container usare flag -p (port) 8080:80 -> host-port:cointaner-port 
+docker run --rm -p 8080:80 nginx
+
+#per caricare index.html su webserver nginx in docker usare flaf -v  / percorso locale:percorso su nginx
+#percorso /usr/share/nginx/html è dove vengono caricate le pagine index.html
+#il file nel l deve essere per forza un index.html 
+docker run --rm -p 8080:80 -v /home/sabaja/Documents/:/usr/share/nginx/html/ nginx:latest
+
+DOCKER NEL REPOSITORY
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#To save the state of the container as a new image, first exit from it:
+exit
+#commit:
+docker commit -m "What did you do to the image" -a "Author Name" container-id repository/new_image_name
+example:
+docker commit -m "added node.js" -a "Thuesday Jacopo" a63128d2dff8 repo/ubuntu-nodejs
+response:
+sha256:ab035e7afa47738710ccfd5ce8ad8a361e7279b604444b98dcd29ff7a2e88a4b
+
+DA CONTINUARE continue:
+Step 8 — Pushing Docker Images to a Docker Repository
+
+Per lanciare jenkins/blueoceans
+docker run \
+  --rm \
+  -u root \
+  -p 8080:8080 \
+  -v jenkins-data:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "$HOME":/home \
+  jenkinsci/blueocean
+
+DOCKER DESKTOP
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Per connettersi e creare la password di docker-desktop, genera una chiave GPG. Puoi inizializzare pass utilizzando una chiave GPG. Per generare una chiave GPG, esegui:
+$ gpg --generate-key
+
+risposta:
+gpg: directory '/home/sabaja/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/home/sabaja/.gnupg/openpgp-revocs.d/CF034E0FA88DEF9A670AFF840572386173EFA77E.rev'
+public and secret key created and signed.
+
+pub   ed25519 2025-04-19 [SC] [expires: 2028-04-18]
+      CF034E0FA88DEF9A670AFF840572386173EFA77E
+uid                      Jacopo Sabatini <jacoposabatini76@gmail.com>
+sub   cv25519 2025-04-19 [E] [expires: 2028-04-18]
+
+Lanciare il comando pass init con la pub key (pass init <your_generated_gpg-id_public_key>)
+$ pass init CF034E0FA88DEF9A670AFF840572386173EFA77E
+
+risposta:
+mkdir: created directory '/home/sabaja/.password-store/'
+Password store initialized for CF034E0FA88DEF9A670AFF840572386173EFA77E
+
+
+DOCKER-Postgres
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
